@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,9 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Connecting the App to Parse and enabling the local datastore
         Parse.enableLocalDatastore(this);
-
         Parse.initialize(this, "APPLICATION ID", "CLIENT KEY");
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo","bar");
+        testObject.saveInBackground();
+
     }
 
     @Override
