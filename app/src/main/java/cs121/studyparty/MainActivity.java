@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Connecting the App to Parse and enabling the local datastore
         Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "APPLICATION ID", "CLIENT KEY");
+        Parse.initialize(this, "fixtsqaXWjGu2kiIPbpn9ssAm1mgHrFfXMyIQQNQ", "9yrXZ0JKvYjzR5ma77XTTpPQeO2nU6q6zWwMsdvW");
 
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo","bar");
