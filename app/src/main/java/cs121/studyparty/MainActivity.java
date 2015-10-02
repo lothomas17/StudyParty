@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         Parse.initialize(this, "fixtsqaXWjGu2kiIPbpn9ssAm1mgHrFfXMyIQQNQ", "9yrXZ0JKvYjzR5ma77XTTpPQeO2nU6q6zWwMsdvW");
 
         ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo","bar");
+        testObject.put("lamas","test");
         testObject.saveInBackground();
 
     }

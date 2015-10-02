@@ -4,6 +4,8 @@
  */
 package cs121.studyparty;
 
+import android.text.format.DateUtils;
+
 import java.util.Date;
 
 public class User {
@@ -11,14 +13,20 @@ public class User {
     //fields for User, just a name and the time since the user logged in.
     private String name_;
     private long timeFromLogin_;
-    private Date instantiatedAt_;
+    private Date timeToDie_;
+
+    public static final long HOUR = 3600 * 1000;
 
     User(String userName){
+
         setName(userName);
 
-        //sets the time of instantiation, making it easier to computer time.
+        //sets the time of instantiation, making it easier to compute time.
         long msTime = System.currentTimeMillis();
-        instantiatedAt_ = new Date(msTime);
+        Date instantiatedAt = new Date(msTime);
+        Date timeToDie_ = new Date(instantiatedAt.getTime() + 8 * HOUR);
+
+        timeFromLogin_ = 0;
     }
 
     //Setters and Getters
@@ -48,7 +56,7 @@ public class User {
         long msTime = System.currentTimeMillis();
         Date curDateTime = new Date(msTime);
 
-        timeFromLogin_ = curDateTime.getTime() - instantiatedAt_.getTime();
+        timeFromLogin_ = (curDateTime.getTime() - timeToDie_.getTime()) - 8 * HOUR;
     }
 
     /**
