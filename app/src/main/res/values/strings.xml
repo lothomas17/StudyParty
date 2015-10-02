@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Study Party</string>
 
-    <string name="hello_world">Hello World!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="location_array">
+        <item>Shanahan 2475</item>
+    </string-array>
 </resources>
