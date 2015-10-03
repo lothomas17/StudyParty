@@ -8,10 +8,15 @@ import java.util.ArrayList;
 public class Room {
 
     //private fields for the room class
-    private boolean isOccupied_;
-    private String roomName_;
+    private boolean isOccupied_ = false;
+    private String roomName_ = "";
     private ArrayList<User> occupants_ = new ArrayList<> ();
-    private String location_;
+    private String location_ = "";
+
+    Room(String name, String location) {
+        setLocation(location);
+        setName(name);
+    }
 
     //Setters and Getters for the Room Class
 
