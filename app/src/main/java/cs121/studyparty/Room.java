@@ -10,7 +10,7 @@ public class Room {
     //private fields for the room class
     private boolean isOccupied_;
     private String roomName_;
-    private ArrayList occupants_;
+    private ArrayList<User> occupants_ = new ArrayList<> ();
     private String location_;
 
     //Setters and Getters for the Room Class
@@ -86,6 +86,34 @@ public class Room {
             //just prints out a warning if the user is not in the study party.
             System.out.println("The user specified is not in the study party.");
         }
+    }
+
+    /**
+     * A function that will return the longest time since someone checked into the study room
+     * @return 0 if the room is empty, else the number of millis since check-in.
+     */
+    public long getBestTime() {
+        //checks to see how many users are in the study party.
+        int numUsers = occupants_.size();
+        long[] checkInTimes = new long[numUsers];
+        long bestTime = 0;
+        //returns 0 if nobody is in the study party.
+        if(numUsers == 0) {
+            return bestTime;
+        }
+        //builds the array of times that each user checked in at.
+        for(int i = 0; i < numUsers; ++i) {
+            User userToCheck = occupants_.get(i);
+            checkInTimes[i] = userToCheck.getTime();
+        }
+        //finds the maximum of the array.
+        for(int j = 0; j < numUsers; ++j) {
+            if(checkInTimes[j] > bestTime) {
+                bestTime = checkInTimes[j];
+            }
+        }
+
+        return bestTime;
     }
 
 }

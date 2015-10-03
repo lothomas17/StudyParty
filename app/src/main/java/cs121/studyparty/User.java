@@ -4,8 +4,6 @@
  */
 package cs121.studyparty;
 
-import android.text.format.DateUtils;
-
 import java.util.Date;
 
 public class User {
@@ -24,7 +22,7 @@ public class User {
         //sets the time of instantiation, making it easier to compute time.
         long msTime = System.currentTimeMillis();
         Date instantiatedAt = new Date(msTime);
-        Date timeToDie_ = new Date(instantiatedAt.getTime() + 8 * HOUR);
+        timeToDie_ = new Date(instantiatedAt.getTime() + 8 * HOUR);
 
         timeFromLogin_ = 0;
     }
@@ -63,7 +61,7 @@ public class User {
      * Getter for time field of the user class
      * @return the time since the user checked into the study room.
      */
-    public double getTime() {
+    public long getTime() {
         return timeFromLogin_;
     }
 
