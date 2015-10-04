@@ -109,6 +109,7 @@ public class Room {
         //builds the array of times that each user checked in at.
         for(int i = 0; i < numUsers; ++i) {
             User userToCheck = occupants_.get(i);
+            userToCheck.setTime();
             checkInTimes[i] = userToCheck.getTime();
         }
         //finds the maximum of the array.
