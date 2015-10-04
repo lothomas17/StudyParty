@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name = "cs121.studyparty.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,6 +24,7 @@
             android:name=".JoinRoomActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" >
+            //android:theme = "@style/Theme.AppCompat"
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cs121.studyparty.MainActivity" />

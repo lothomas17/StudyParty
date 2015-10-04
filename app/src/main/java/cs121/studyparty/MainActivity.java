@@ -27,15 +27,11 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainButton = (Button)findViewById(R.id.main_button);
-
-        //Connecting the App to Parse and enabling the local datastore
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "fixtsqaXWjGu2kiIPbpn9ssAm1mgHrFfXMyIQQNQ", "9yrXZ0JKvYjzR5ma77XTTpPQeO2nU6q6zWwMsdvW");
-
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("lamas","test");
         testObject.saveInBackground();
+
+        mainButton = (Button)findViewById(R.id.main_button);
 
         staticSpinner = (Spinner) findViewById(R.id.static_spinner);
 

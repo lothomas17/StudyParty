@@ -1,11 +1,14 @@
 package cs121.studyparty;
 
+import android.content.Context;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +30,8 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     EditText name_editText;
     Button main_button;
     Button main_button2;
+    InputMethodManager inputManager;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,13 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        switch (id) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -82,29 +94,37 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        name = name_editText.getText().toString();
         //if the first button is clicked
         if(v.getId() == R.id.main_button) {
             // Also add that value to the list shown in the ListView
-            nameList.add(name_editText.getText().toString());
+            nameList.add(name);
             mArrayAdapter.notifyDataSetChanged();
 
             //switch to leave party button
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
+
+            //hide keyboard after entering name
+            inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
         //if the second button is clicked
         else if (v.getId() == R.id.main_button2){
             //remove name from list
-            nameList.remove(nameList.size() - 1);
-             //I realize this needs to be edited later for when the user is not the most recent addition
+            int index = nameList.indexOf(name);
+            nameList.remove(index);
+             //I realize this needs to be edited for when the user is not the most recent addition
             mArrayAdapter.notifyDataSetChanged();
 
             //switch back to join party button
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
         }
-
 
     }
 
