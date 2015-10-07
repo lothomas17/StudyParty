@@ -32,11 +32,15 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     Button main_button2;
     InputMethodManager inputManager;
     String name;
+    Room toAdd;
+    User checkingIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
+
+        toAdd= new Room("2475","Shanahan");
 
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
@@ -95,14 +99,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         name = name_editText.getText().toString();
+        if(nameList.indexOf(name) == -1) {
+            checkingIn = new User(name);
+        }
+        ArrayList<User> testArray = toAdd.getOccupants();
         //if the first button is clicked
         if(v.getId() == R.id.main_button) {
             // Also add that value to the list shown in the ListView
-            nameList.add(name);
+            toAdd.addUsertoParty(checkingIn);
+            nameList.add(checkingIn.getName());
             mArrayAdapter.notifyDataSetChanged();
 
             //switch to leave party button
-            main_button.setVisibility(View.INVISIBLE);
+            //main_button.setVisibility(View.INVISIBLE);    //temporarily disabled for testing.
             main_button2.setVisibility(View.VISIBLE);
 
             //hide keyboard after entering name
@@ -116,14 +125,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         //if the second button is clicked
         else if (v.getId() == R.id.main_button2){
             //remove name from list
-            int index = nameList.indexOf(name);
-            nameList.remove(index);
-             //I realize this needs to be edited for when the user is not the most recent addition
-            mArrayAdapter.notifyDataSetChanged();
+            int index = nameList.indexOf(checkingIn.getName());
+            if(index != -1) {
+                nameList.remove(index);
+                toAdd.removeUserfromParty(checkingIn);
 
-            //switch back to join party button
-            main_button2.setVisibility(View.INVISIBLE);
-            main_button.setVisibility(View.VISIBLE);
+                //I realize this needs to be edited for when the user is not the most recent addition
+                mArrayAdapter.notifyDataSetChanged();
+
+                //switch back to join party button
+                //main_button2.setVisibility(View.INVISIBLE);   //temporarily disabled for testing
+                main_button.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }

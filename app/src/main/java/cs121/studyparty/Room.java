@@ -68,12 +68,19 @@ public class Room {
         return location_;
     }
 
+    public ArrayList<User> getOccupants(){
+        return occupants_;
+    }
+
     /**
      * A method that takes a user and adds them to the study party.
      * @param toAdd is the user that will be added to the list.
      */
     public void addUsertoParty(User toAdd) {
         occupants_.add(toAdd);
+        if(!isOccupied_){
+            isOccupied_ = true;
+        }
     }
 
     /**
@@ -91,6 +98,10 @@ public class Room {
             //just prints out a warning if the user is not in the study party.
             System.out.println("The user specified is not in the study party.");
         }
+        if(occupants_.size() == 0) {
+            isOccupied_ = false;
+        }
+
     }
 
     /**

@@ -14,6 +14,8 @@ public class Application extends android.app.Application {
         Parse.enableLocalDatastore(getApplicationContext());
         Parse.initialize(this, "fixtsqaXWjGu2kiIPbpn9ssAm1mgHrFfXMyIQQNQ", "9yrXZ0JKvYjzR5ma77XTTpPQeO2nU6q6zWwMsdvW");
 
+        
+
     }
 
 }
