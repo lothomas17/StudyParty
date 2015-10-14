@@ -12,7 +12,7 @@ public class User {
     private String id_;
     private long timeFromLogin_;
     private Date instantiatedAt;
-    
+
 
     User(String userName){
 
