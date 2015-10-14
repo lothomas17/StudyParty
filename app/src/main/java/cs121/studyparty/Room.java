@@ -94,10 +94,10 @@ public class Room {
         //checks to see how many users are in the study party.
         int numUsers = occupants_.size();
         long[] checkInTimes = new long[numUsers];
-        long bestTime = 0;
+        long bestTime = 999999999;
         //returns 0 if nobody is in the study party.
         if(numUsers == 0) {
-            return bestTime;
+            return -1;
         }
         //builds the array of times that each user checked in at.
         for(int i = 0; i < numUsers; ++i) {
@@ -107,7 +107,7 @@ public class Room {
         }
         //finds the maximum of the array.
         for(int j = 0; j < numUsers; ++j) {
-            if(checkInTimes[j] > bestTime) {
+            if(checkInTimes[j] < bestTime) {
                 bestTime = checkInTimes[j];
             }
         }
