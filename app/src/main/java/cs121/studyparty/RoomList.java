@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class RoomList {
 
-    private ArrayList<Room> roomList = new ArrayList<> ();
+    public static ArrayList<Room> roomList = new ArrayList<> ();
 
 
     //Setters and Getters

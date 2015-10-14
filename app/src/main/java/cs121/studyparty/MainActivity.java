@@ -10,16 +10,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ListView;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-public class MainActivity extends AppCompatActivity{
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        AdapterView.OnItemClickListener{
 
     Button mainButton;
-    Spinner staticSpinner;
+    ListView mainListView;
+    ArrayAdapter mArrayAdapter;
+    ArrayList roomList = new ArrayList();
     public static String room;
 
     @Override
@@ -28,47 +32,25 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("lamas","test");
+        testObject.put("lamas", "test");
         testObject.saveInBackground();
 
         mainButton = (Button)findViewById(R.id.main_button);
 
-        staticSpinner = (Spinner) findViewById(R.id.static_spinner);
+        mainListView = (ListView) findViewById(R.id.main_listview);
 
-        // Create an ArrayAdapter using the string array and a default spinner
-        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
-                .createFromResource(this, R.array.location_array,
-                        android.R.layout.simple_spinner_item);
+        //add room to roomList
+        Room sampleRoom = new Room("Shanahan 2475");
+        roomList.add(sampleRoom.getRoomName());
 
-        // Specify the layout to use when the list of choices appears
-        staticAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //display rooms in roomList in the listview
+        mArrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1,
+                roomList);
 
-        // Apply the adapter to the spinner
-        staticSpinner.setAdapter(staticAdapter);
+        mainListView.setAdapter(mArrayAdapter);
 
-        staticSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                Log.d("room", (String) parent.getItemAtPosition(position));
-                //set room name to whatever user clicked
-                room = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            //switch to next screen if submit button is clicked
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), JoinRoomActivity.class));
-            }
-        });
+        mainListView.setOnItemClickListener(this);
 
     }
 
@@ -92,5 +74,19 @@ public class MainActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+       room = (String) parent.getItemAtPosition(position);
+        // Log the item's position and contents
+        // to the console in Debug
+        Log.d("room", position + ": " + roomList.get(position));
+        //switch screens when room is picked
+        startActivity(new Intent(getApplicationContext(), JoinRoomActivity.class));
     }
 }

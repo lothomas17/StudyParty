@@ -25,7 +25,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
     TextView main_textView;
     ListView mainListView;
-    ArrayAdapter mArrayAdapter;
+    ArrayAdapter nameAdapter;
     ArrayList nameList = new ArrayList();
     EditText name_editText;
     Button main_button;
@@ -40,7 +40,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
 
-        toAdd= new Room("2475","Shanahan");
 
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
@@ -56,12 +55,12 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
-        mArrayAdapter = new ArrayAdapter(this,
+        nameAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 nameList);
 
         // Set the ListView to use the ArrayAdapter
-        mainListView.setAdapter(mArrayAdapter);
+        mainListView.setAdapter(nameAdapter);
 
         mainListView.setOnItemClickListener(this);
 
@@ -99,6 +98,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         name = name_editText.getText().toString();
+
         if(nameList.indexOf(name) == -1) {
             checkingIn = new User(name);
         }
@@ -108,7 +108,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             // Also add that value to the list shown in the ListView
             toAdd.addUsertoParty(checkingIn);
             nameList.add(checkingIn.getName());
-            mArrayAdapter.notifyDataSetChanged();
+            nameAdapter.notifyDataSetChanged();
 
             //switch to leave party button
             //main_button.setVisibility(View.INVISIBLE);    //temporarily disabled for testing.
@@ -131,7 +131,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
                 toAdd.removeUserfromParty(checkingIn);
 
                 //I realize this needs to be edited for when the user is not the most recent addition
-                mArrayAdapter.notifyDataSetChanged();
+                nameAdapter.notifyDataSetChanged();
 
                 //switch back to join party button
                 //main_button2.setVisibility(View.INVISIBLE);   //temporarily disabled for testing

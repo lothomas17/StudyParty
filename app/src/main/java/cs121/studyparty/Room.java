@@ -9,12 +9,10 @@ public class Room {
 
     //private fields for the room class
     private boolean isOccupied_ = false;
-    private String roomName_ = "";
+    private String roomName_;
     private ArrayList<User> occupants_ = new ArrayList<> ();
-    private String location_ = "";
 
-    Room(String name, String location) {
-        setLocation(location);
+    Room(String name) {
         setName(name);
     }
 
@@ -50,22 +48,6 @@ public class Room {
      */
     public String getRoomName() {
         return roomName_;
-    }
-
-    /**
-     * The setter for the location field on the class.
-     * @param location is the location of the room (Building / Floor)
-     */
-    public void setLocation(String location) {
-        location_ = location;
-    }
-
-    /**
-     * The getter for the location field on the class
-     * @return the location of the room. (Building / Floor)
-     */
-    public String getLocation() {
-        return location_;
     }
 
     public ArrayList<User> getOccupants(){
