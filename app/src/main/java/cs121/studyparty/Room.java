@@ -12,6 +12,7 @@ public class Room {
     private String roomName_;
     private int numOccupants_;
     private ArrayList<User> occupants_ = new ArrayList<> ();
+    private int numOccupants_ = 0;
 
     Room(String name, int numOccupants_) {
         setName(name);
@@ -86,6 +87,14 @@ public class Room {
 
     public ArrayList<User> getOccupants(){
         return occupants_;
+    }
+
+    public void setOccupants() {
+        numOccupants_ = occupants_.size();
+    }
+
+    public int getNumOccupants() {
+        return numOccupants_;
     }
 
     /**
