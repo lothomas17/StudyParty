@@ -36,7 +36,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
 
-
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
         main_textView.setText(MainActivity.room);
