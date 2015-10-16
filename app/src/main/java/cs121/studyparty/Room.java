@@ -10,11 +10,12 @@ public class Room {
     //private fields for the room class
     private boolean isOccupied_ = false;
     private String roomName_;
+    private int numOccupants_;
     private ArrayList<User> occupants_ = new ArrayList<> ();
-    private int numOccupants_ = 0;
 
-    Room(String name) {
+    Room(String name, int numOccupants_) {
         setName(name);
+        setNumOccupants(numOccupants_);
     }
 
     //Setters and Getters for the Room Class
@@ -33,6 +34,38 @@ public class Room {
      */
     public boolean getOccupancy() {
         return isOccupied_;
+    }
+
+    /**
+     * The setter for the numOccupants field
+     * @param occupancy is the number of occupants in the room
+     */
+    public void setNumOccupants(int occupancy) {
+        numOccupants_ = occupancy;
+    }
+
+    /**
+     * The getter for the numOccupants field
+     * @return the number of occupants associated with the room
+     */
+    public int getNumOccupants() {
+        return numOccupants_;
+    }
+
+    /**
+     * Increases occupancy
+     * @return the number of occupants increased by one
+     */
+    public int incrementNumOccupants() {
+        return ++numOccupants_;
+    }
+
+    /**
+     * Decreases occupancy
+     * @return the number of occupants decreased by one
+     */
+    public int decrementNumOccupants() {
+        return --numOccupants_;
     }
 
     /**
@@ -57,10 +90,6 @@ public class Room {
 
     public void setOccupants() {
         numOccupants_ = occupants_.size();
-    }
-
-    public int getNumOccupants() {
-        return numOccupants_;
     }
 
     /**
