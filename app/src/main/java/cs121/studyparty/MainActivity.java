@@ -1,20 +1,22 @@
 package cs121.studyparty;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 
-import com.parse.Parse;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -27,9 +29,27 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("lamas","test");
+        final ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("fool", "nonsense");
         testObject.saveInBackground();
+        String objectID = testObject.getObjectId();  // for some reason objectID comes out as null
+        Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
+        query.getInBackground("yhsdJHLv09", new GetCallback<ParseObject>() {  // don't want to have to hardcode in objectID
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    Log.d("Crazyshit", "might actually be working");
+                    String testFool = "hey " + testObject.getString("fool");  // pulls accurate information from the cloud!
+                    Log.d("Crazyshit", testFool);
+
+                } else {
+                    Log.d("BADBAD", e.toString());
+                }
+            }
+        });
+
+
 
         mainButton = (Button)findViewById(R.id.main_button);
 
