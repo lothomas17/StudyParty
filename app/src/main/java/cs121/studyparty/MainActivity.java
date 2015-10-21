@@ -17,12 +17,14 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity{
 
     Button mainButton;
     Spinner staticSpinner;
     public static String room;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +33,28 @@ public class MainActivity extends AppCompatActivity{
 
         final ParseObject testObject = new ParseObject("TestObject");
         testObject.put("fool", "nonsense");
-        testObject.saveInBackground();
+        testObject.saveInBackground(new SaveCallback() {
+
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Saved successfully.
+                    Log.d("KEYKEY", "User update saved!");
+                   String ID = testObject.getObjectId();
+                    Log.d("KEYKEY", "The object id (from User) is: " + ID);
+                } else {
+                    // The save failed.
+                    Log.d("KEYKEY", "User update error: " + e);
+                }
+            }
+        });
+
         String objectID = testObject.getObjectId();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
-        query.getInBackground("yhsdJHLv09", new GetCallback<ParseObject>() {  // don't want to have to hardcode in objectID
+        String name = testObject.getObjectId();
+        Log.d("KEYKEY", "name is " + name);
+        query.getInBackground(name, new GetCallback<ParseObject>() {  // don't want to have to hardcode in objectID
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Log.d("Crazyshit", "might actually be working");
