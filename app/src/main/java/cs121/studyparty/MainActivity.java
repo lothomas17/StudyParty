@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         final ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("fool", "nonsense");
+        testObject.put("batman", "ALFRED");
         testObject.saveInBackground(new SaveCallback() {
 
             public void done(ParseException e) {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity{
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     Log.d("Crazyshit", "might actually be working");
-                    String testFool = "hey " + testObject.getString("fool");  // pulls accurate information from the cloud!
+                    String testFool = "hey " + testObject.getString("batman");  // pulls accurate information from the cloud!
                     Log.d("Crazyshit", testFool);
 
                 } else {
