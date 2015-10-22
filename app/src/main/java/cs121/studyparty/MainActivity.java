@@ -48,6 +48,12 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         String objectID = testObject.getObjectId();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
 
