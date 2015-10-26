@@ -15,7 +15,6 @@ import android.widget.Spinner;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -31,15 +30,19 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ParseObject testObject = new ParseObject("TestObject");
+        final Room testRoom = new Room("ShanaHAN", "hmmm");
+        testRoom.setOccupancy(true);
+
+        final RoomList testObject = new RoomList();
         testObject.put("batman", "ALFRED");
+        testObject.addRoomToList(testRoom);
         testObject.saveInBackground(new SaveCallback() {
 
             public void done(ParseException e) {
                 if (e == null) {
                     // Saved successfully.
                     Log.d("KEYKEY", "User update saved!");
-                   String ID = testObject.getObjectId();
+                    String ID = testObject.getObjectId();
                     Log.d("KEYKEY", "The object id (from User) is: " + ID);
                 } else {
                     // The save failed.
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -57,14 +60,19 @@ public class MainActivity extends AppCompatActivity{
         String objectID = testObject.getObjectId();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
+        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
         String name = testObject.getObjectId();
         Log.d("KEYKEY", "name is " + name);
-        query.getInBackground(name, new GetCallback<ParseObject>() {  // don't want to have to hardcode in objectID
-            public void done(ParseObject object, ParseException e) {
+        query.getInBackground(name, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
+            public void done(RoomList object, ParseException e) {
                 if (e == null) {
                     Log.d("Crazyshit", "might actually be working");
                     String testFool = "hey " + testObject.getString("batman");  // pulls accurate information from the cloud!
+                    Room didThisWork = object.getRoomFromList(0);
+                    boolean YES = didThisWork.getOccupancy();
+                    String YESSIR = String.valueOf(YES);
+                    Log.d("Crazyshit", YESSIR);
+                    object.removeRoomFromList(testRoom);  // we successfully stored a RoomList in the cloud!!
                     Log.d("Crazyshit", testFool);
 
                 } else {

@@ -1,11 +1,15 @@
 package cs121.studyparty;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 /**
  * Created by Loring Thomas on 10/4
  */
-public class RoomList {
+@ParseClassName("RoomList")
+public class RoomList extends ParseObject {
 
     private ArrayList<Room> roomList = new ArrayList<> ();
 
@@ -26,4 +30,9 @@ public class RoomList {
         }
     }
 
+    public Room getRoomFromList(int i) {
+        return roomList.get(i);
+    }
+
 }
+
