@@ -10,6 +10,7 @@ public class User {
 
     //fields for User, just a name and the time since the user logged in.
     private String id_;
+    private boolean inRoom_ = false;
     private long timeFromLogin_;
     private Date instantiatedAt;
 
@@ -26,6 +27,18 @@ public class User {
     }
 
     //Setters and Getters
+
+    public boolean isInRoom_(){
+        return inRoom_;
+    }
+
+    public void joinRoom(){
+        inRoom_ = true;
+    }
+
+    public void leaveRoom(){
+        inRoom_ = false;
+    }
 
     /**
      * Setter for the name field on the user class

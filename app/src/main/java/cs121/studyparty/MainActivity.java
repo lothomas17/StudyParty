@@ -9,9 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -22,10 +20,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ListView mainListView;
     ArrayAdapter mArrayAdapter;
-    ArrayList<String> roomNameList = new ArrayList();
-    ArrayList<Room> roomList = new ArrayList();
     public static String room;
-    public static Room sampleRoom;
+    public RoomList roomListObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +34,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
-        //add room to roomList and room name to roomNameList
-        sampleRoom = new Room("Shanahan 2475", 0);
-        roomList.add(sampleRoom);
-        roomNameList.add(sampleRoom.getRoomName());
+            roomListObject = new RoomList();
+            roomListObject.initializeList();
 
-        //display room names in roomNameList in the listview
+        //display room names in roomNames in the listview
         mArrayAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
-                roomNameList);
+                roomListObject.getRoomNames());
 
         mainListView.setAdapter(mArrayAdapter);
 
@@ -83,13 +77,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        room = (String) parent.getItemAtPosition(position);
+       ArrayList<Room> roomList = roomListObject.getRoom();
+
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
             Room currentRoom = roomList.get(i);
             if (currentRoom.getRoomName().equals(room)){
-                sampleRoom = currentRoom;
+                roomListObject.chosenRoom = currentRoom;
             }
         }
+
         // Log the item's position and contents
         // to the console in Debug
         Log.d("room", position + ": " + roomList.get(position));

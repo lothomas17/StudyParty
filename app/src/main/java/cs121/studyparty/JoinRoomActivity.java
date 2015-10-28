@@ -1,6 +1,5 @@
 package cs121.studyparty;
 
-import android.content.Context;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,12 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-import java.util.ArrayList;
 
 /**
  * Created by Nava Dallal on 10/1/15. This is for the functionality of the second screen
@@ -30,26 +25,33 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     Button main_button2;
     InputMethodManager inputManager;
     User checkingIn;
+    int numOccupants = RoomList.chosenRoom.getNumOccupants();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
 
+        if (checkingIn == null) {
+            checkingIn = new User("sample user");
+        }
+
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
         main_textView.setText(MainActivity.room);
 
         details_textView = (TextView) findViewById(R.id.details_textview);
-        details_textView.setText("Occupancy: " + MainActivity.sampleRoom.getNumOccupants());
+        details_textView.setText("Occupancy: " + numOccupants);
 
         main_button = (Button) findViewById(R.id.main_button);
         main_button.setOnClickListener(this);
-        main_button.setBackgroundColor(Color.rgb(135,206,235));
+        main_button.setBackgroundColor(Color.rgb(135, 206, 235));
+
 
         main_button2 = (Button) findViewById(R.id.main_button2);
         main_button2.setOnClickListener(this);
-        main_button2.setBackgroundColor(Color.rgb(135,206,235));
+        main_button2.setBackgroundColor(Color.rgb(135, 206, 235));
+        main_button2.setVisibility(View.INVISIBLE);
 
     }
 
@@ -85,16 +87,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.main_button) {
-            MainActivity.sampleRoom.incrementNumOccupants();
-            details_textView.setText("Occupancy: " + MainActivity.sampleRoom.getNumOccupants());
+            RoomList.chosenRoom.incrementNumOccupants();
+            details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
+            checkingIn.joinRoom();
+
         }
         if (v.getId() == R.id.main_button2) {
-            MainActivity.sampleRoom.decrementNumOccupants();
-            details_textView.setText("Occupancy: " + MainActivity.sampleRoom.getNumOccupants());
+            RoomList.chosenRoom.decrementNumOccupants();
+            details_textView.setText("Occupancy: " + numOccupants);
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
+            checkingIn.leaveRoom();
         }
 
     }

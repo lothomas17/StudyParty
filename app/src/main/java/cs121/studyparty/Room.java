@@ -13,6 +13,10 @@ public class Room {
     private int numOccupants_;
     private ArrayList<User> occupants_ = new ArrayList<> ();
 
+    Room(String name){
+        setName(name);
+    }
+
     Room(String name, int numOccupants_) {
         setName(name);
         setNumOccupants(numOccupants_);
