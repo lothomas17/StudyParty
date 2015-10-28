@@ -82,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
             Room currentRoom = roomList.get(i);
-            if (currentRoom.getRoomName().equals(room)){
+            long time = currentRoom.getBestTime();
+            String toCheck = currentRoom.getRoomName() + currentRoom.convertTimetoString(time);
+            if ((toCheck).equals(room)){
                 roomListObject.chosenRoom = currentRoom;
             }
         }

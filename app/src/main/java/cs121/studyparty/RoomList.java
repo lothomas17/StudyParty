@@ -3,7 +3,7 @@ package cs121.studyparty;
 import java.util.ArrayList;
 
 /**
- * Created by loring on 10/15/15.
+ * This is the class that will be stored into Parse, and manages all of the rooms that we have.
  */
 public class RoomList {
 
@@ -11,6 +11,8 @@ public class RoomList {
     private ArrayList<String> roomNames = new ArrayList<>();
     public static Room chosenRoom;
     Room sampleRoom = new Room("Shanahan 2475");
+    public long time = sampleRoom.getBestTime();
+
 
     public ArrayList<Room> getRoom() {
         return rooms_;
@@ -27,6 +29,6 @@ public class RoomList {
     public void initializeList(){
         //add room to roomList and room name to roomNameList
         addRoom(sampleRoom);
-        roomNames.add(sampleRoom.getRoomName());
+        roomNames.add(sampleRoom.getRoomName() + sampleRoom.convertTimetoString(time));
     }
 }
