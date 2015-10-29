@@ -9,40 +9,51 @@ import java.util.Date;
 public class User {
 
     //fields for User, just a name and the time since the user logged in.
-    private String name_;
+    private String id_;
+    private boolean inRoom_ = false;
     private long timeFromLogin_;
-    private Date timeToDie_;
+    private Date instantiatedAt;
 
-    public static final long HOUR = 3600 * 1000;
 
     User(String userName){
 
-        setName(userName);
+        setID(userName);
 
         //sets the time of instantiation, making it easier to compute time.
         long msTime = System.currentTimeMillis();
-        Date instantiatedAt = new Date(msTime);
-        timeToDie_ = new Date(instantiatedAt.getTime() + 8 * HOUR);
+        instantiatedAt = new Date(msTime);
 
         timeFromLogin_ = 0;
     }
 
     //Setters and Getters
 
+    public boolean isInRoom_(){
+        return inRoom_;
+    }
+
+    public void joinRoom(){
+        inRoom_ = true;
+    }
+
+    public void leaveRoom(){
+        inRoom_ = false;
+    }
+
     /**
      * Setter for the name field on the user class
      * @param name is the name to be set.
      */
-    public void setName(String name) {
-        name_ = name;
+    public void setID(String name) {
+        id_ = name;
     }
 
     /**
      * Getter for the name field of the user class
      * @return the name of the user
      */
-    public String getName() {
-        return name_;
+    public String getID() {
+        return id_;
     }
 
     /**
@@ -54,7 +65,7 @@ public class User {
         long msTime = System.currentTimeMillis();
         Date curDateTime = new Date(msTime);
 
-        timeFromLogin_ = (curDateTime.getTime() - timeToDie_.getTime()) - 8 * HOUR;
+        timeFromLogin_ = (curDateTime.getTime() - instantiatedAt.getTime());
     }
 
     /**
