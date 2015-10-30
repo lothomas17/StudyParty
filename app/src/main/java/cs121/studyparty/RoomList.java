@@ -16,7 +16,6 @@ public class RoomList extends ParseObject{
     private ArrayList<String> roomNames = new ArrayList<>();
     public static Room chosenRoom;
     Room sampleRoom = new Room("Shanahan 2475");
-    public long time = sampleRoom.getBestTime();
 
 
     public ArrayList<Room> getRoom() {
@@ -48,6 +47,6 @@ public class RoomList extends ParseObject{
     public void initializeList(){
         //add room to roomList and room name to roomNameList
         addRoom(sampleRoom);
-        roomNames.add(sampleRoom.getRoomName() + sampleRoom.convertTimetoString(time));
+        roomNames.add(sampleRoom.getRoomName() + sampleRoom.getBestTime());
     }
 }
