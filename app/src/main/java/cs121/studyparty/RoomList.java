@@ -1,34 +1,38 @@
 package cs121.studyparty;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 /**
- * This is the class that will be stored into Parse, and manages all of the rooms that we have.
+ * Created by Loring Thomas on 10/4
  */
-public class RoomList {
+@ParseClassName("RoomList")
+public class RoomList extends ParseObject {
 
-    private ArrayList<Room> rooms_ = new ArrayList<>();
-    private ArrayList<String> roomNames = new ArrayList<>();
-    public static Room chosenRoom;
-    Room sampleRoom = new Room("Shanahan 2475");
-    public long time = sampleRoom.getBestTime();
+    private ArrayList<Room> roomList = new ArrayList<> ();
 
 
-    public ArrayList<Room> getRoom() {
-        return rooms_;
+    //Setters and Getters
+
+    public void addRoomToList(Room toAdd) {
+        roomList.add(toAdd);
     }
 
-    public void addRoom(Room toAdd) {
-        rooms_.add(toAdd);
+    public void removeRoomFromList(Room toRemove) {
+        int indexToRemove = roomList.indexOf(toRemove);
+        if(indexToRemove != -1) {
+            roomList.remove(indexToRemove);
+        }
+        else {
+            System.out.println("Room is not currently in list!");
+        }
     }
 
-    public ArrayList<String> getRoomNames(){
-        return roomNames;
+    public Room getRoomFromList(int i) {
+        return roomList.get(i);
     }
 
-    public void initializeList(){
-        //add room to roomList and room name to roomNameList
-        addRoom(sampleRoom);
-        roomNames.add(sampleRoom.getRoomName() + sampleRoom.convertTimetoString(time));
-    }
 }
+
