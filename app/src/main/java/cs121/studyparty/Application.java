@@ -24,6 +24,8 @@ public class Application extends android.app.Application {
         final RoomList parseList = new RoomList();
         final Room testRoom = new Room("Shan 16");
 
+        parseList.addRoom(testRoom);
+
         parseList.put("batman", "ALFRED");
         parseList.saveInBackground(new SaveCallback() {
 
@@ -41,10 +43,10 @@ public class Application extends android.app.Application {
             }
         });
 
-        parseList.addRoom(testRoom);
-        parseList.initializeList();
-
-        parseList.saveInBackground();
+//        parseList.addRoom(testRoom);
+//        parseList.initializeList();
+//
+//        parseList.saveInBackground();
 
     }
 

@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static String room;
     public RoomList roomListObject;
 
+    final static String OBJECTID = "qeYYWl1Y61";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +42,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final RoomList testObject = new RoomList();
 
-        while(Application.getIdName() == null) {
-            try {
-                Log.d("Sleepy", "I'm sleeping now");
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
+        try {
+            Log.d("Sleepy", "I'm sleeping now");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
 
         String objectID = Application.getIdName();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
 
-        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
+        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class).include;
         Log.d("KEYKEY", "name is " + Application.getIdName());
 
-        query.getInBackground(objectID, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
+        query.getInBackground(OBJECTID, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
             public void done(RoomList object, ParseException e) {
                 if (e == null) {
                     if (object == null) {
                         Log.d("Broken", "Everything is broken!");
                     }
                     //object.addRoom(testRoom);
+                    final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "qeYYWl1Y61");
                     Log.d("Crazyshit", "I done goofed");
-                    Room didThisWork = object.getRoomFromList(0);
+                    Room didThisWork = listToUse.getRoomFromList(0);
                     boolean YES = didThisWork.getOccupancy();
                     String YESSIR = String.valueOf(YES);
                     Log.d("Crazyshit", YESSIR);

@@ -38,7 +38,7 @@ public class Room {
      * The getter for the isOccupied field
      * @return the boolean for whether the room is occupied or not.
      */
-    public boolean getOccupancy() {
+    public final boolean getOccupancy() {
         return isOccupied_;
     }
 
@@ -46,7 +46,7 @@ public class Room {
      * The getter for the numOccupants field
      * @return the number of occupants associated with the room
      */
-    public int getNumOccupants() {
+    public final int getNumOccupants() {
         return numOccupants_;
     }
 
@@ -66,7 +66,7 @@ public class Room {
      * The getter for the roomName field
      * @return the room name associated with the room
      */
-    public String getRoomName() {
+    public final String getRoomName() {
         return roomName_;
     }
 
@@ -74,7 +74,7 @@ public class Room {
      * Getter for the array of users.
      * @return the array of users occupants_
      */
-    public ArrayList<User> getOccupants(){
+    public final ArrayList<User> getOccupants(){
         return occupants_;
     }
 
@@ -91,7 +91,7 @@ public class Room {
      * Increases occupancy
      * @return the number of occupants increased by one
      */
-    public int incrementNumOccupants() {
+    public final int incrementNumOccupants() {
         return ++numOccupants_;
     }
 
@@ -99,7 +99,7 @@ public class Room {
      * Decreases occupancy
      * @return the number of occupants decreased by one
      */
-    public int decrementNumOccupants() {
+    public final int decrementNumOccupants() {
         return --numOccupants_;
     }
 
@@ -139,7 +139,7 @@ public class Room {
      * A function that will return the time since someone checked into the study room
      * @return 0 if the room is empty, else the number of millis since check-in.
      */
-    public String getBestTime() {
+    public final String getBestTime() {
         //The human readable form of the bestTime
         String toReturn;
 

@@ -15,10 +15,10 @@ public class RoomList extends ParseObject{
     private ArrayList<Room> rooms_ = new ArrayList<>();
     private ArrayList<String> roomNames = new ArrayList<>();
     public static Room chosenRoom;
-    Room sampleRoom = new Room("Shanahan 2475");
+    final Room sampleRoom = new Room("Shanahan 2475");
 
 
-    public ArrayList<Room> getRoom() {
+    public final ArrayList<Room> getRoom() {
         return rooms_;
     }
 
@@ -26,7 +26,7 @@ public class RoomList extends ParseObject{
         rooms_.add(toAdd);
     }
 
-    public ArrayList<String> getRoomNames(){
+    public final ArrayList<String> getRoomNames(){
         return roomNames;
     }
 
@@ -40,7 +40,7 @@ public class RoomList extends ParseObject{
         }
     }
 
-    public Room getRoomFromList(int i) {
+    public final Room getRoomFromList(int i) {
         return rooms_.get(i);
     }
 
