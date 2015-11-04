@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String objectID = Application.getIdName();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
 
-        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class).include;
+        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
         Log.d("KEYKEY", "name is " + Application.getIdName());
 
         query.getInBackground(OBJECTID, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (object == null) {
                         Log.d("Broken", "Everything is broken!");
                     }
-                    //object.addRoom(testRoom);
+                    object.addRoom(testRoom);
                     final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "qeYYWl1Y61");
                     Log.d("Crazyshit", "I done goofed");
                     Room didThisWork = listToUse.getRoomFromList(0);
