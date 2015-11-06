@@ -11,6 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
@@ -21,10 +27,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static String room;
     public RoomList roomListObject;
 
+    final static String OBJECTID = "qeYYWl1Y61";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final Room testRoom = new Room("ShanaHAN", 0);
+        testRoom.setOccupancy(true);
+
+        final RoomList testObject = new RoomList();
+
+
+        try {
+            Log.d("Sleepy", "I'm sleeping now");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+        String objectID = Application.getIdName();  // for some reason objectID comes out as null
+        Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
+
+        ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
+        Log.d("KEYKEY", "name is " + Application.getIdName());
+
+        query.getInBackground(OBJECTID, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
+            public void done(RoomList object, ParseException e) {
+                if (e == null) {
+                    if (object == null) {
+                        Log.d("Broken", "Everything is broken!");
+                    }
+                    object.addRoom(testRoom);
+                    final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "qeYYWl1Y61");
+                    Log.d("Crazyshit", "I done goofed");
+                    Room didThisWork = listToUse.getRoomFromList(0);
+                    boolean YES = didThisWork.getOccupancy();
+                    String YESSIR = String.valueOf(YES);
+                    Log.d("Crazyshit", YESSIR);
+
+                } else {
+                    Log.d("BADBAD", e.toString());
+                }
+            }
+        });
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
@@ -75,9 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
-            Room currentRoom = roomList.get(i);
-            long time = currentRoom.getBestTime();
-            String toCheck = currentRoom.getRoomName() + currentRoom.convertTimetoString(time);
+            Room currentRoom = roomListObject.getRoomFromList(i);
+            String toCheck = currentRoom.getRoomName() + currentRoom.getBestTime();
             if ((toCheck).equals(room)){
                 roomListObject.chosenRoom = currentRoom;
             }

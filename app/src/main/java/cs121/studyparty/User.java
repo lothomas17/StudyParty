@@ -28,15 +28,15 @@ public class User {
 
     //Setters and Getters
 
-    public boolean isInRoom_(){
+    public final boolean isInRoom_(){
         return inRoom_;
     }
 
-    public void joinRoom(){
+    public final void joinRoom(){
         inRoom_ = true;
     }
 
-    public void leaveRoom(){
+    public final void leaveRoom(){
         inRoom_ = false;
     }
 
@@ -52,7 +52,7 @@ public class User {
      * Getter for the name field of the user class
      * @return the name of the user
      */
-    public String getID() {
+    public final String getID() {
         return id_;
     }
 
@@ -72,7 +72,7 @@ public class User {
      * Getter for time field of the user class
      * @return the time since the user checked into the study room.
      */
-    public long getTime() {
+    public final long getTime() {
         return timeFromLogin_;
     }
 
