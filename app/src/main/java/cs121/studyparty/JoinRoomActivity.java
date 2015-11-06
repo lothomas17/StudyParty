@@ -12,12 +12,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.provider.Settings.Secure;
+
 
 /**
  * Created by Nava Dallal on 10/1/15. This is for the functionality of the second screen
  */
 public class JoinRoomActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemClickListener{
+
 
     TextView main_textView;
     TextView details_textView;
@@ -26,8 +29,11 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     InputMethodManager inputManager;
     User checkingIn;
     int numOccupants = RoomList.chosenRoom.getNumOccupants();
+    String name = Secure.getString(Application.getContext().getContentResolver(), Secure.ANDROID_ID);
+    User toAdd = new User(name);
 
-    @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_room);
@@ -88,18 +94,23 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.main_button) {
             RoomList.chosenRoom.incrementNumOccupants();
-            details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
-            main_button.setVisibility(View.INVISIBLE);
-            main_button2.setVisibility(View.VISIBLE);
-            checkingIn.joinRoom();
-
+            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
+            if(duplicateCheck != 0) {
+            }
+            else {  
+                details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
+                main_button.setVisibility(View.INVISIBLE);
+                main_button2.setVisibility(View.VISIBLE);
+                toAdd.joinRoom();
+            }
         }
         if (v.getId() == R.id.main_button2) {
             RoomList.chosenRoom.decrementNumOccupants();
             details_textView.setText("Occupancy: " + numOccupants);
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
-            checkingIn.leaveRoom();
+            toAdd.leaveRoom();
+            RoomList.chosenRoom.removeUserfromParty(toAdd);
         }
 
     }

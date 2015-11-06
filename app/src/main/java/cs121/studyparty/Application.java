@@ -1,5 +1,6 @@
 package cs121.studyparty;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -13,10 +14,12 @@ import com.parse.SaveCallback;
 public class Application extends android.app.Application {
 
     public static String idName;
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sContext = getApplicationContext();
         Parse.enableLocalDatastore(getApplicationContext());
         ParseObject.registerSubclass(RoomList.class);
         Parse.initialize(this, "fixtsqaXWjGu2kiIPbpn9ssAm1mgHrFfXMyIQQNQ", "9yrXZ0JKvYjzR5ma77XTTpPQeO2nU6q6zWwMsdvW");
@@ -52,6 +55,10 @@ public class Application extends android.app.Application {
 
     public static String getIdName() {
         return idName;
+    }
+
+    public static Context getContext() {
+        return sContext;
     }
 
 }

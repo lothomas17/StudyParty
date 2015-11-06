@@ -107,11 +107,16 @@ public class Room {
      * A method that takes a user and adds them to the study party.
      * @param toAdd is the user that will be added to the list.
      */
-    public void addUsertoParty(User toAdd) {
+    public int addUsertoParty(User toAdd) {
+        int duplicateCheck = occupants_.indexOf(toAdd);
+        if(duplicateCheck != -1) {
+            return -1;
+        }
         occupants_.add(toAdd);
         if(!isOccupied_){
             isOccupied_ = true;
         }
+        return 0;
     }
 
     /**
