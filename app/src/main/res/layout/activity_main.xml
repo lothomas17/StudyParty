@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/sky_background">
 
     <TextView
         android:id="@+id/main_textview"
@@ -10,15 +11,29 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:typeface="serif"
+        android:text="Welcome!"/>
+
+    <TextView
+        android:id="@+id/main_textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
         android:textSize="20sp"
-        android:text="Welcome! \n Please choose a room to study in:"/>
+        android:typeface="serif"
+        android:text="Please choose a room to study in:"/>
+
 
     <ListView
         android:id="@+id/main_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:textColor="#f9f9f9"
+        />
 
 
 </LinearLayout>

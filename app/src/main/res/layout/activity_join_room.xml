@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/sky_background">
 
     <TextView
         android:id="@+id/main_textview"
@@ -9,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
+        android:typeface="serif"
         android:textSize="25sp"/>
 
     <TextView
@@ -17,25 +19,29 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
+        android:typeface="serif"
         android:textSize="20sp"/>
 
 
     <Button
         android:id="@+id/main_button"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginLeft="120dp"
         android:text="Join Study Party"
-        android:background="@drawable/rounded_button"/>
+        android:textSize="15sp"
+        android:background="@drawable/rounded_button"
+        android:width="50dp" />
 
     <Button
         android:id="@+id/main_button2"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="120dp"
+        android:textSize="15sp"
         android:text="Leave Study Party"
-        android:background="@drawable/rounded_button"/>
+        android:background="@drawable/rounded_button" />
 
 </LinearLayout>

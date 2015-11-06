@@ -89,6 +89,9 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.main_button) {
             RoomList.chosenRoom.incrementNumOccupants();
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
+            long time = RoomList.chosenRoom.getBestTime();
+            RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
+            main_textView.setText(RoomList.chosenRoom.getRoomName());
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
             checkingIn.joinRoom();
@@ -97,6 +100,9 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.main_button2) {
             RoomList.chosenRoom.decrementNumOccupants();
             details_textView.setText("Occupancy: " + numOccupants);
+            long time = RoomList.chosenRoom.getBestTime();
+            RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName() + RoomList.chosenRoom.convertTimetoString(time));
+            main_textView.setText(RoomList.chosenRoom.getRoomName());
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
             checkingIn.leaveRoom();
