@@ -90,21 +90,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView.setOnItemClickListener(this);
 
-        inputSearch = (EditText) findViewById(R.id.inputSearch);  inputSearch.addTextChangedListener(new TextWatcher() {  
+        inputSearch = (EditText) findViewById(R.id.inputSearch); 
+
+         inputSearch.addTextChangedListener(new TextWatcher() {
+
             //@Override 
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) { 
-            // When user changes the text 
-             MainActivity.this.mArrayAdapter.getFilter().filter(cs); 
-             }  
-           // @Override 
-             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,  int arg3)
-             { 
-                //TODO Auto-generated method stub  
-              }  
+                // When user changes the text 
+                MainActivity.this.mArrayAdapter.getFilter().filter(cs); 
+            }
+
             // @Override 
-             public void afterTextChanged(Editable arg0) { 
-            // TODO Auto-generated method stub 
-            } 
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,  int arg3) { 
+                //TODO Auto-generated method stub  
+            }
+
+              
+
+            // @Override 
+            public void afterTextChanged(Editable arg0) { 
+                // TODO Auto-generated method stub 
+            }
+             
         });
 
 
