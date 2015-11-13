@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -90,28 +91,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView.setOnItemClickListener(this);
 
-        inputSearch = (EditText) findViewById(R.id.inputSearch); 
+        inputSearch = (EditText) inputSearch.findViewById(R.id.inputSearch);
 
-         inputSearch.addTextChangedListener(new TextWatcher() {
+        inputSearch.addTextChangedListener(new TextWatcher() {
 
-            //@Override 
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) { 
-                // When user changes the text 
-                MainActivity.this.mArrayAdapter.getFilter().filter(cs); 
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changed the Text
+                MainActivity.this.mArrayAdapter.getFilter().filter(cs);
             }
 
-            // @Override 
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,  int arg3) { 
-                //TODO Auto-generated method stub  
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
             }
 
-              
-
-            // @Override 
-            public void afterTextChanged(Editable arg0) { 
-                // TODO Auto-generated method stub 
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
             }
-             
         });
 
 
