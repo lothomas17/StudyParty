@@ -1,10 +1,10 @@
 package cs121.studyparty;
 
-import java.util.ArrayList;
-
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the class that will be stored into Parse, and manages all of the rooms that we have.
@@ -12,8 +12,8 @@ import com.parse.ParseObject;
 @ParseClassName("RoomList")
 public class RoomList extends ParseObject{
 
-    private ArrayList<Room> rooms_ = new ArrayList<>();
-    private ArrayList<String> roomNames = new ArrayList<>();
+    //private ArrayList<Room> rooms_ = new ArrayList<>();
+    //private ArrayList<String> roomNames_ = new ArrayList<>();
     public static Room chosenRoom;
     final Room sampleRoom = new Room("Shanahan 2475");
     Room room2 = new Room("Shanahan 2465");
@@ -34,22 +34,34 @@ public class RoomList extends ParseObject{
 
 
 
-    public final ArrayList<Room> getRoom() {
-        return rooms_;
+    public final List<Room> getRoom() {
+        return getList("rooms_");
     }
 
     public void addRoom(Room toAdd) {
-        rooms_.add(toAdd);
+        List<Room> rooms = getList("rooms_");
+        if (rooms == null)  {
+            List<Room> newRoom = new ArrayList<>();
+            newRoom.add(toAdd);
+            put("rooms_", newRoom);
+        }
+        else {
+            rooms.add(toAdd);
+            put("rooms_", rooms);
+        }
+
     }
 
-    public final ArrayList<String> getRoomNames(){
-        return roomNames;
+    public final List<String> getRoomNames(){
+        return getList("roomNames_");
     }
 
     public void removeRoomFromList(Room toRemove) {
-        int indexToRemove = rooms_.indexOf(toRemove);
+        List<Room> rooms = getList("rooms_");
+        int indexToRemove = rooms.indexOf(toRemove);
         if(indexToRemove != -1) {
-            rooms_.remove(indexToRemove);
+            rooms.remove(indexToRemove);
+            put("rooms_", rooms);
         }
         else {
             System.out.println("Room not in list");
@@ -57,7 +69,8 @@ public class RoomList extends ParseObject{
     }
 
     public final Room getRoomFromList(int i) {
-        return rooms_.get(i);
+        List<Room> rooms = getList("rooms_");
+        return rooms.get(i);
     }
 
     public void initializeList(){
@@ -70,13 +83,33 @@ public class RoomList extends ParseObject{
         addRoom(room3);
         addRoom(room2);
         addRoom(sampleRoom);
-        roomNames.add(room8.getRoomName() + time8);
-        roomNames.add(room7.getRoomName() + time7);
-        roomNames.add(room6.getRoomName() + time6);
-        roomNames.add(room5.getRoomName() + time5);
-        roomNames.add(room4.getRoomName() + time4);
-        roomNames.add(room3.getRoomName() + time3);
-        roomNames.add(room2.getRoomName() + time2);
-        roomNames.add(sampleRoom.getRoomName() +time);
+
+        List<String> roomNames = getList("roomNames_");
+        if (roomNames == null) {
+            List<String> names = new ArrayList<>();
+            names.add(sampleRoom.getRoomName() + sampleRoom.getBestTime());
+            names.add(room8.getRoomName() + time8);
+            names.add(room7.getRoomName() + time7);
+            names.add(room6.getRoomName() + time6);
+            names.add(room5.getRoomName() + time5);
+            names.add(room4.getRoomName() + time4);
+            names.add(room3.getRoomName() + time3);
+            names.add(room2.getRoomName() + time2);
+            names.add(sampleRoom.getRoomName() +time);
+            put("roomNames_", names);
+        }
+        else {
+            roomNames.add(sampleRoom.getRoomName() + sampleRoom.getBestTime());
+            roomNames.add(room8.getRoomName() + time8);
+            roomNames.add(room7.getRoomName() + time7);
+            roomNames.add(room6.getRoomName() + time6);
+            roomNames.add(room5.getRoomName() + time5);
+            roomNames.add(room4.getRoomName() + time4);
+            roomNames.add(room3.getRoomName() + time3);
+            roomNames.add(room2.getRoomName() + time2);
+            roomNames.add(sampleRoom.getRoomName() +time);
+            put("roomNames_", roomNames);
+        }
+
     }
 }

@@ -1,8 +1,8 @@
 package cs121.studyparty;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,11 +16,9 @@ import android.widget.ListView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemClickListener{
@@ -31,27 +29,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public RoomList roomListObject;
     EditText inputSearch;
 
-    final static String OBJECTID = "qeYYWl1Y61";
+    final static String OBJECTID = "aqfWCXmdBR";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+       // Application application = (Application)getApplication();
+
 
         final Room testRoom = new Room("ShanaHAN", 0);
         testRoom.setOccupancy(true);
 
         final RoomList testObject = new RoomList();
+        String falseID = Application.getIdName();
 
-
-        try {
-            Log.d("Sleepy", "I'm sleeping now");
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         String objectID = Application.getIdName();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
@@ -65,19 +60,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (object == null) {
                         Log.d("Broken", "Everything is broken!");
                     }
-                    object.addRoom(testRoom);
-                    final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "qeYYWl1Y61");
-                    Log.d("Crazyshit", "I done goofed");
-                    Room didThisWork = listToUse.getRoomFromList(0);
+                    //object.addRoom(testRoom);
+                    //final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "aqfWCXmdBR");
+                    Log.d("Crazy", "I done goofed");
+                    Room didThisWork = object.getRoomFromList(0);
                     boolean YES = didThisWork.getOccupancy();
+                    String NAME = didThisWork.getRoomName();
                     String YESSIR = String.valueOf(YES);
-                    Log.d("Crazyshit", YESSIR);
+                    Log.d("Crazy", YESSIR + NAME);
 
                 } else {
                     Log.d("BADBAD", e.toString());
                 }
             }
         });
+
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
@@ -86,38 +83,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //display room names in roomNames in the listview
         mArrayAdapter = new ArrayAdapter(this,
-                R.layout.mytextview,R.id.tv,
+                android.R.layout.simple_list_item_1,
                 roomListObject.getRoomNames());
 
         mainListView.setAdapter(mArrayAdapter);
 
         mainListView.setOnItemClickListener(this);
 
-        inputSearch = (EditText) findViewById(R.id.inputSearch);
-
-        inputSearch.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // When user changes the text
-                MainActivity.this.mArrayAdapter.getFilter().filter(cs);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-            }
+        inputSearch = (EditText) findViewById(R.id.inputSearch);  inputSearch.addTextChangedListener(new TextWatcher() {  
+            //@Override 
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) { 
+            // When user changes the text 
+             MainActivity.this.mArrayAdapter.getFilter().filter(cs); 
+             }  
+           // @Override 
+             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,  int arg3)
+             { 
+                //TODO Auto-generated method stub  
+              }  
+            // @Override 
+             public void afterTextChanged(Editable arg0) { 
+            // TODO Auto-generated method stub 
+            } 
         });
 
-    }
 
+
+        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        room = (String) parent.getItemAtPosition(position);
-       ArrayList<Room> roomList = roomListObject.getRoom();
+       List<Room> roomList = roomListObject.getRoom();
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
