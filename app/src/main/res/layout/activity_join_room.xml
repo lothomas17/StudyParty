@@ -2,7 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/sky_background">
+    android:background="@color/primary_material_light">
 
     <TextView
         android:id="@+id/main_textview"
@@ -11,7 +11,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:typeface="serif"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:background = "#FF12C6FE"
+        android:textColor="#060d0e" />
 
     <TextView
         android:id="@+id/details_textview"
@@ -20,7 +22,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:typeface="serif"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:background = "@color/primary_material_light"
+        android:textColor="#050c0e" />
 
 
     <Button

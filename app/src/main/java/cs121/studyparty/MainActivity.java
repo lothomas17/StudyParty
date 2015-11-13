@@ -3,12 +3,15 @@ package cs121.studyparty;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.parse.GetCallback;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayAdapter mArrayAdapter;
     public static String room;
     public RoomList roomListObject;
+    EditText inputSearch;
 
     final static String OBJECTID = "qeYYWl1Y61";
 
@@ -48,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
 
         String objectID = Application.getIdName();  // for some reason objectID comes out as null
         Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
@@ -90,7 +93,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView.setOnItemClickListener(this);
 
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                // When user changes the text
+                MainActivity.this.mArrayAdapter.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
