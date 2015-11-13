@@ -4,40 +4,62 @@
  */
 package cs121.studyparty;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.Date;
 
-public class User {
+@ParseClassName("User")
+public class User extends ParseObject{
 
     //fields for User, just a name and the time since the user logged in.
-    private String id_;
-    private boolean inRoom_ = false;
-    private long timeFromLogin_;
-    private Date instantiatedAt;
+    //private String id_;
+    //private boolean inRoom_ = false;
+    //private long timeFromLogin_;
+    //private Date instantiatedAt;
 
+    public User() {
+        //put("id_", "NO ID");
+        //put("inRoom_", false);
+        //long msTime = System.currentTimeMillis();
+        //Date instantiatedAt = new Date(msTime);
+        //put("instantiatedAt", instantiatedAt);
+
+
+        //put("timeFromLogin_", 0);
+    }
 
     User(String userName){
 
-        setID(userName);
+        put("id_", userName);
+        put("inRoom_", false);
 
         //sets the time of instantiation, making it easier to compute time.
         long msTime = System.currentTimeMillis();
-        instantiatedAt = new Date(msTime);
+        Date instantiatedAt = new Date(msTime);
+        put("instantiatedAt", instantiatedAt);
 
-        timeFromLogin_ = 0;
+
+        put("timeFromLogin_", 0);
     }
 
     //Setters and Getters
 
-    public final boolean isInRoom_(){
-        return inRoom_;
+    public final boolean isInRoom_() {
+        Boolean inRoom = getBoolean("inRoom_");
+        if (inRoom == null) {
+            put("inRoom_", false);
+        }
+        return getBoolean("inRoom_");
+
     }
 
     public final void joinRoom(){
-        inRoom_ = true;
+        put("inRoom_", true);
     }
 
     public final void leaveRoom(){
-        inRoom_ = false;
+        put("inRoom_", false);
     }
 
     /**
@@ -45,7 +67,7 @@ public class User {
      * @param name is the name to be set.
      */
     public void setID(String name) {
-        id_ = name;
+        put("id_", name);
     }
 
     /**
@@ -53,7 +75,11 @@ public class User {
      * @return the name of the user
      */
     public final String getID() {
-        return id_;
+        String id = getString("id_");
+        if (id == null) {
+            put("id_", "NO ID");
+        }
+        return getString("id_");
     }
 
     /**
@@ -64,8 +90,13 @@ public class User {
         //gets the current time, and subtracts the login time from it.
         long msTime = System.currentTimeMillis();
         Date curDateTime = new Date(msTime);
-
-        timeFromLogin_ = (curDateTime.getTime() - instantiatedAt.getTime());
+        Date createdDate = getDate("instantiatedAt");
+        if (createdDate == null) {
+            createdDate = new Date(msTime);
+        }
+        long createdTime = createdDate.getTime();
+        long timeDiff = (curDateTime.getTime() - createdTime);
+        put("timeFromLogin_", timeDiff);
     }
 
     /**
@@ -73,7 +104,7 @@ public class User {
      * @return the time since the user checked into the study room.
      */
     public final long getTime() {
-        return timeFromLogin_;
+        return getLong("timeFromLogin_");
     }
 
 

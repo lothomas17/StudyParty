@@ -1,27 +1,56 @@
 package cs121.studyparty;
 
+import android.util.Log;
+
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Loring Thomas on 9/29/15. This is the basic unit for the study room app!
  */
-public class Room {
+@ParseClassName("Room")
+public class Room extends ParseObject{
 
     //private fields for the room class
-    private boolean isOccupied_ = false;
-    private String roomName_;
-    private int numOccupants_;
-    private ArrayList<User> occupants_ = new ArrayList<> ();
+    //private boolean isOccupied_ = false;
+    //private String roomName_;
+    //private int numOccupants_;
+    //private ArrayList<User> occupants_ = new ArrayList<> ();
 
     final static long TIMEOUT = 28800000;
 
+    public Room() {
+        //put("roomName_", "NO NAME");
+        put("isOccupied_", false);
+        //put("numOccupants_", 0);
+        //List<User> occupants = new ArrayList<>();
+        //put("occupants", occupants);
+    }
+
     Room(String name){
-        setName(name);
+        put("roomName_", name);
+        put("isOccupied_", false);
+        put("numOccupants_", 0);
+        List<User> occupants = new ArrayList<>();
+        put("occupants_", occupants);
     }
 
     Room(String name, int numOccupants_) {
-        setName(name);
-        setNumOccupants(numOccupants_);
+        put("roomName_", name);
+        if (numOccupants_ > 0) {
+            put("isOccupied_", true);
+            put("numOccupants_", numOccupants_);
+        }
+        else {
+            put("isOccupied_", false);
+            put("numOccupants_", 0);
+        }
+
+        List<User> occupants = new ArrayList<>();
+        put("occupants_", occupants);
     }
 
     //Setters and Getters for the Room Class
@@ -31,7 +60,7 @@ public class Room {
      * @param occupied determines if the room is occupied or not.
      */
     public void setOccupancy(boolean occupied) {
-        isOccupied_ = occupied;
+        put("isOccupied_", occupied);
     }
 
     /**
@@ -39,7 +68,14 @@ public class Room {
      * @return the boolean for whether the room is occupied or not.
      */
     public final boolean getOccupancy() {
-        return isOccupied_;
+        Boolean isOccupied = getBoolean("isOccupied_");
+        if (isOccupied == null) {
+            put("isOccupied_", false);
+            return false;
+        }
+        else {
+            return getBoolean("isOccupied_");
+        }
     }
 
     /**
@@ -47,11 +83,11 @@ public class Room {
      * @return the number of occupants associated with the room
      */
     public final int getNumOccupants() {
-        return numOccupants_;
+        return getInt("numOccupants_");
     }
 
     public void setNumOccupants(int number) {
-        numOccupants_ = number;
+        put("numOccupants_", number);
     }
 
     /**
@@ -59,7 +95,7 @@ public class Room {
      * @param name is the name of the room
      */
     public void setName(String name) {
-        roomName_ = name;
+        put("roomName_", name);
     }
 
     /**
@@ -67,15 +103,26 @@ public class Room {
      * @return the room name associated with the room
      */
     public final String getRoomName() {
-        return roomName_;
+        String roomName = getString("roomName_");
+        if (roomName == null) {
+            return "NO NAME";
+        }
+        else {
+            return roomName;
+        }
     }
 
     /**
      * Getter for the array of users.
      * @return the array of users occupants_
      */
-    public final ArrayList<User> getOccupants(){
-        return occupants_;
+    public final List<User> getOccupants(){
+        List<User> occupants = getList("occupants_");
+        if (occupants == null) {
+            occupants = new ArrayList<>();
+            put("occupants_", occupants);
+        }
+        return getList("occupants_");
     }
 
 
@@ -83,7 +130,12 @@ public class Room {
      * A setter for the number of occupants in a room, grabbing the data from the array
      */
     public void setOccupants() {
-        numOccupants_ = occupants_.size();
+        List<User> roomOccupants = getList("occupants_");
+        if (roomOccupants == null) {
+            roomOccupants = new ArrayList<>();
+        }
+        int numOccupants = roomOccupants.size();
+        put("numOccupants_", numOccupants);
     }
 
 
@@ -91,16 +143,20 @@ public class Room {
      * Increases occupancy
      * @return the number of occupants increased by one
      */
-    public final int incrementNumOccupants() {
-        return ++numOccupants_;
+    public final void incrementNumOccupants() {
+        increment("numOccupants_", 1);
     }
 
     /**
      * Decreases occupancy
      * @return the number of occupants decreased by one
      */
-    public final int decrementNumOccupants() {
-        return --numOccupants_;
+    public final void decrementNumOccupants() {
+        int numOccupants = getInt("numOccupants_");
+        if (numOccupants == 0) {
+            Log.d("BADBAD", "trying to decrement the occupant number of an empty room!");
+        }
+        increment("numOccupants_", -1);
     }
 
     /**
@@ -108,9 +164,14 @@ public class Room {
      * @param toAdd is the user that will be added to the list.
      */
     public void addUsertoParty(User toAdd) {
-        occupants_.add(toAdd);
-        if(!isOccupied_){
-            isOccupied_ = true;
+        List<User> occupants = getList("occupants_");
+        if (occupants == null) {
+            occupants = new ArrayList<>();
+        }
+        occupants.add(toAdd);
+        Boolean isOccupied = getBoolean("isOccupied_");
+        if(!isOccupied){
+            setOccupancy(true);
         }
     }
 
@@ -121,15 +182,21 @@ public class Room {
      */
     public void removeUserfromParty(User toRemove) {
         //uses the built in indexOf method from ArrayList to find the right index
-        int indexToRemove = occupants_.indexOf(toRemove);
+        List<User> occupants = getList("occupants_");
+        if (occupants == null) {
+            occupants = new ArrayList<>();
+            Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
+        }
+        int indexToRemove = occupants.indexOf(toRemove);
         if(indexToRemove != -1) {
-            occupants_.remove(indexToRemove);
+            occupants.remove(indexToRemove);
         }
         else {
             //just prints out a warning if the user is not in the study party.
             System.out.println("The user specified is not in the study party.");
         }
-        if(numOccupants_ == 0) {
+        int numOccupants = getInt("numOccupants_");
+        if(numOccupants == 0) {
             setOccupancy(false);
         }
 
@@ -152,8 +219,12 @@ public class Room {
             bestTime = -1;
         }
         //builds the array of times that each user checked in at.
+        List<User> occupants = getList("occupants_");
+        if (occupants == null) {
+            Log.d("BADBAD", "getNumOccupants should be 0 - occupants list hasn't been initialized!");
+        }
         for(int i = 0; i < numUsers; ++i) {
-            User userToCheck = occupants_.get(i);
+            User userToCheck = occupants.get(i);
             userToCheck.setTime();
             checkInTimes[i] = userToCheck.getTime();
         }

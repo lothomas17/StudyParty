@@ -1,8 +1,8 @@
 package cs121.studyparty;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,14 +11,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemClickListener{
@@ -28,28 +25,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static String room;
     public RoomList roomListObject;
 
-    final static String OBJECTID = "qeYYWl1Y61";
+    final static String OBJECTID = "aqfWCXmdBR";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+       // Application application = (Application)getApplication();
 
 
         final Room testRoom = new Room("ShanaHAN", 0);
         testRoom.setOccupancy(true);
 
         final RoomList testObject = new RoomList();
-
-
-        try {
-            Log.d("Sleepy", "I'm sleeping now");
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String falseID = Application.getIdName();
 
 
         String objectID = Application.getIdName();  // for some reason objectID comes out as null
@@ -64,13 +56,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (object == null) {
                         Log.d("Broken", "Everything is broken!");
                     }
-                    object.addRoom(testRoom);
-                    final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "qeYYWl1Y61");
-                    Log.d("Crazyshit", "I done goofed");
-                    Room didThisWork = listToUse.getRoomFromList(0);
+                    //object.addRoom(testRoom);
+                    //final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "aqfWCXmdBR");
+                    Log.d("Crazy", "I done goofed");
+                    Room didThisWork = object.getRoomFromList(0);
                     boolean YES = didThisWork.getOccupancy();
+                    String NAME = didThisWork.getRoomName();
                     String YESSIR = String.valueOf(YES);
-                    Log.d("Crazyshit", YESSIR);
+                    Log.d("Crazy", YESSIR + NAME);
 
                 } else {
                     Log.d("BADBAD", e.toString());
@@ -124,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        room = (String) parent.getItemAtPosition(position);
-       ArrayList<Room> roomList = roomListObject.getRoom();
+       List<Room> roomList = roomListObject.getRoom();
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
