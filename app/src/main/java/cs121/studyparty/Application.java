@@ -1,5 +1,6 @@
 package cs121.studyparty;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -14,16 +15,18 @@ import com.parse.SaveCallback;
 public class Application extends android.app.Application {
 
     public static String idName;
+
     public static boolean isSet;
 
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         Log.d("KEYKEY", "Application runs first!");
 
-
-
+        sContext = getApplicationContext();
         Parse.enableLocalDatastore(getApplicationContext());
         ParseObject.registerSubclass(RoomList.class);
         ParseObject.registerSubclass(Room.class);
@@ -81,6 +84,10 @@ public class Application extends android.app.Application {
     public static String getIdName() {
         Log.d("KEYKEY", "getIDNAME called");
         return idName;
+    }
+
+    public static Context getContext() {
+        return sContext;
     }
 
 }

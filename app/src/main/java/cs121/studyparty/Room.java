@@ -163,17 +163,27 @@ public class Room extends ParseObject{
      * A method that takes a user and adds them to the study party.
      * @param toAdd is the user that will be added to the list.
      */
-    public void addUsertoParty(User toAdd) {
+
+    public int addUsertoParty(User toAdd) {
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
             occupants = new ArrayList<>();
         }
         occupants.add(toAdd);
         Boolean isOccupied = getBoolean("isOccupied_");
-        if(!isOccupied){
+        if (!isOccupied) {
             setOccupancy(true);
+
+            int duplicateCheck = occupants.indexOf(toAdd);
+            if (duplicateCheck != -1) {
+                return -1;
+            }
+
         }
+        return 0;
     }
+
+
 
     /**
      * Removes the user passed in from the study party. If they are not a member, then a warning
