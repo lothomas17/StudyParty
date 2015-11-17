@@ -5,4 +5,7 @@
     <string-array name="location_array">
         <item>Shanahan 2475</item>
     </string-array>
+    <string name="title_activity_loading">Loading</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

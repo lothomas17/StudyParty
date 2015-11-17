@@ -15,6 +15,7 @@ public class RoomList extends ParseObject{
     //private ArrayList<Room> rooms_ = new ArrayList<>();
     //private ArrayList<String> roomNames_ = new ArrayList<>();
     public static Room chosenRoom;
+    public static int chosenIndex;
     final Room sampleRoom = new Room("Shanahan 2475");
     Room room2 = new Room("Shanahan 2465");
     Room room3 = new Room("Shanahan 2460");
@@ -32,10 +33,20 @@ public class RoomList extends ParseObject{
     public String time7 = room7.getBestTime();
     public String time8 = room8.getBestTime();
 
+    public static boolean firstTime = false;
+    public static String roomID;
 
 
     public final List<Room> getRoom() {
         return getList("rooms_");
+    }
+
+    public void setChosenRoom(Room chosenRoom){
+        this.chosenRoom = chosenRoom;
+    }
+
+    public Room getChosenRoom(){
+        return chosenRoom;
     }
 
     public void addRoom(Room toAdd) {
@@ -54,6 +65,12 @@ public class RoomList extends ParseObject{
 
     public final List<String> getRoomNames(){
         return getList("roomNames_");
+    }
+
+    public final void editRoomName(int index, String name){
+        List<String> roomNames = getList("roomNames_");
+        roomNames.set(index, name);
+
     }
 
     public void removeRoomFromList(Room toRemove) {
@@ -87,7 +104,6 @@ public class RoomList extends ParseObject{
         List<String> roomNames = getList("roomNames_");
         if (roomNames == null) {
             List<String> names = new ArrayList<>();
-            names.add(sampleRoom.getRoomName() + sampleRoom.getBestTime());
             names.add(room8.getRoomName() + time8);
             names.add(room7.getRoomName() + time7);
             names.add(room6.getRoomName() + time6);
@@ -99,7 +115,6 @@ public class RoomList extends ParseObject{
             put("roomNames_", names);
         }
         else {
-            roomNames.add(sampleRoom.getRoomName() + sampleRoom.getBestTime());
             roomNames.add(room8.getRoomName() + time8);
             roomNames.add(room7.getRoomName() + time7);
             roomNames.add(room6.getRoomName() + time6);

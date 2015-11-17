@@ -24,7 +24,7 @@ public class Room extends ParseObject{
 
     public Room() {
         //put("roomName_", "NO NAME");
-        put("isOccupied_", false);
+     //   put("isOccupied_", false);
         //put("numOccupants_", 0);
         //List<User> occupants = new ArrayList<>();
         //put("occupants", occupants);
@@ -97,6 +97,7 @@ public class Room extends ParseObject{
     public void setName(String name) {
         put("roomName_", name);
     }
+
 
     /**
      * The getter for the roomName field
@@ -245,7 +246,7 @@ public class Room extends ParseObject{
             }
         }
 
-        if(bestTime <= 60000) {   //1 minute in milliseconds
+        if(bestTime <= 1000) {   //1 minute in milliseconds
             toReturn = "\n" + "Unoccupied";
             return toReturn;
         }

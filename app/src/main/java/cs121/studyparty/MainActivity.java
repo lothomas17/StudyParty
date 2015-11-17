@@ -13,11 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -27,8 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ListView mainListView;
     ArrayAdapter mArrayAdapter;
     public static String room;
-    public RoomList roomListObject;
+    public static RoomList roomListObject;
     EditText inputSearch;
+
 
     final static String OBJECTID = "aqfWCXmdBR";
 
@@ -39,48 +41,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-       // Application application = (Application)getApplication();
-
-
         final Room testRoom = new Room("ShanaHAN", 0);
         testRoom.setOccupancy(true);
 
-        final RoomList testObject = new RoomList();
-        String falseID = Application.getIdName();
-
-
-        String objectID = Application.getIdName();  // for some reason objectID comes out as null
-        Log.d("KEYKEY", "bs " + objectID);  // need to figure out how to get ID we see in Parse dashboard
-
         ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
-        Log.d("KEYKEY", "name is " + Application.getIdName());
-
-        query.getInBackground(OBJECTID, new GetCallback<RoomList>() {  // don't want to have to hardcode in objectID
-            public void done(RoomList object, ParseException e) {
-                if (e == null) {
-                    if (object == null) {
-                        Log.d("Broken", "Everything is broken!");
-                    }
-                    //object.addRoom(testRoom);
-                    //final RoomList listToUse = ParseObject.createWithoutData(RoomList.class, "aqfWCXmdBR");
-                    Log.d("Crazy", "I done goofed");
-                    Room didThisWork = object.getRoomFromList(0);
-                    boolean YES = didThisWork.getOccupancy();
-                    String NAME = didThisWork.getRoomName();
-                    String YESSIR = String.valueOf(YES);
-                    Log.d("Crazy", YESSIR + NAME);
-
-                } else {
-                    Log.d("BADBAD", e.toString());
-                }
-            }
-        });
 
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
+        if (!RoomList.firstTime) {
             roomListObject = new RoomList();
             roomListObject.initializeList();
+            roomListObject.saveInBackground(new SaveCallback() {
+
+                public void done(ParseException e) {
+                    if (e == null) {
+                        // Saved successfully.
+                        Log.d("KEYKEY", "User update saved!");
+                        String ID = roomListObject.getObjectId();
+                        Log.d("KEYKEY", "The object id of roomlist (from User) is: " + ID);
+                        roomListObject.setObjectId(ID);
+                        try {
+                            Log.d("Sleepy", "I'm sleeping now");
+                            Thread.sleep(5000);
+                        } catch (InterruptedException f) {
+                            // TODO Auto-generated catch block
+                            f.printStackTrace();
+                        }
+
+                    } else {
+                        // The save failed.
+                        Log.d("KEYKEY", "User update error: " + e);
+                    }
+                }
+
+            });
+            RoomList.firstTime = true;
+
+            try {
+                Thread.sleep(5000);                 //1000 milliseconds is one second.
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            RoomList.roomID = roomListObject.getObjectId();
+
+        }
+
+    else {
+            try {
+                query.whereEqualTo("objectId", RoomList.roomID);
+                roomListObject = query.getFirst();
+                roomListObject.saveInBackground();
+                Log.d("check", roomListObject.getRoomNames().get(RoomList.chosenIndex));
+                Log.d("time", String.valueOf(roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if ( roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants() > 0) {
+                roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
+                        "\n" +
+                        roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants());
+            }
+            else {
+                roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
+                        "\nUnoccupied");
+            }
+
+        }
 
         //display room names in roomNames in the listview
         mArrayAdapter = new ArrayAdapter(this,
@@ -91,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView.setOnItemClickListener(this);
 
-        inputSearch = (EditText) inputSearch.findViewById(R.id.inputSearch);
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
 
         inputSearch.addTextChangedListener(new TextWatcher() {
 
@@ -115,8 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-
-        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,12 +175,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        room = (String) parent.getItemAtPosition(position);
        List<Room> roomList = roomListObject.getRoom();
+        Log.d("rooms", roomListObject.getRoomNames().get(0));
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
             Room currentRoom = roomListObject.getRoomFromList(i);
             String toCheck = currentRoom.getRoomName() + currentRoom.getBestTime();
             if ((toCheck).equals(room)){
+                roomListObject.chosenIndex = i;
                 roomListObject.chosenRoom = currentRoom;
             }
         }

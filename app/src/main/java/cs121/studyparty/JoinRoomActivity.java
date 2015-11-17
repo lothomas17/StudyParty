@@ -1,5 +1,7 @@
 package cs121.studyparty;
 
+import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_join_room);
 
         if (checkingIn == null) {
@@ -49,15 +52,28 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         details_textView = (TextView) findViewById(R.id.details_textview);
         details_textView.setText("Occupancy: " + numOccupants);
 
-        main_button = (Button) findViewById(R.id.main_button);
-        main_button.setOnClickListener(this);
-        main_button.setBackgroundColor(Color.rgb(135, 206, 235));
+        if (RoomList.chosenRoom.getOccupancy()) {
+            main_button = (Button) findViewById(R.id.main_button);
+            main_button.setOnClickListener(this);
+            main_button.setBackgroundColor(Color.rgb(135, 206, 235));
+            main_button.setVisibility(View.INVISIBLE);
 
+            main_button2 = (Button) findViewById(R.id.main_button2);
+            main_button2.setOnClickListener(this);
+            main_button2.setBackgroundColor(Color.rgb(135, 206, 235));
+            main_button2.setVisibility(View.VISIBLE);
+        }
 
-        main_button2 = (Button) findViewById(R.id.main_button2);
-        main_button2.setOnClickListener(this);
-        main_button2.setBackgroundColor(Color.rgb(135, 206, 235));
-        main_button2.setVisibility(View.INVISIBLE);
+        else {
+            main_button = (Button) findViewById(R.id.main_button);
+            main_button.setOnClickListener(this);
+            main_button.setBackgroundColor(Color.rgb(135, 206, 235));
+            main_button.setVisibility(View.VISIBLE);
+            main_button2 = (Button) findViewById(R.id.main_button2);
+            main_button2.setOnClickListener(this);
+            main_button2.setBackgroundColor(Color.rgb(135, 206, 235));
+            main_button2.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -78,6 +94,8 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         switch (id) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
+               // startActivity(new Intent(getApplicationContext(), Loading.class));
+                Log.d("hi", NavUtils.getParentActivityName(this));
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
@@ -94,6 +112,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.main_button) {
             RoomList.chosenRoom.incrementNumOccupants();
+            RoomList.chosenRoom.setOccupancy(true);
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             main_textView.setText(RoomList.chosenRoom.getRoomName());
@@ -105,18 +124,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             if(duplicateCheck != 0) {
             }
             else {  
-                details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
+/*                details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
                 main_button.setVisibility(View.INVISIBLE);
                 main_button2.setVisibility(View.VISIBLE);
-                toAdd.joinRoom();
+                toAdd.joinRoom();*/
             }
         }
         if (v.getId() == R.id.main_button2) {
             RoomList.chosenRoom.decrementNumOccupants();
-            details_textView.setText("Occupancy: " + numOccupants);
+            Log.d("occupants", String.valueOf(numOccupants));
+            details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             String time = RoomList.chosenRoom.getBestTime();
-            RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName() +time);
-            main_textView.setText(RoomList.chosenRoom.getRoomName());
+            RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
+            main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
             toAdd.leaveRoom();
