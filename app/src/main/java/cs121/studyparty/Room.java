@@ -253,10 +253,13 @@ public class Room extends ParseObject{
         else {
             //converts the time into a human readable string, beginning with a newline.
             long tempTime = bestTime / 60000;
+            long hours = tempTime % 60;
+            tempTime = tempTime / 60;
             long minutes = tempTime % 60;
             tempTime = tempTime / 60;
-            long hours = tempTime % 60;
-            toReturn = "\n" + hours + ":" + minutes;
+            long seconds = tempTime % 60;
+
+            toReturn = "\n" + hours + ":" + minutes + ":" + seconds;
             return toReturn;
         }
     }
