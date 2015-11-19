@@ -22,35 +22,56 @@ public class Room extends ParseObject{
 
     final static long TIMEOUT = 28800000;
 
+    public void setBool(String field, Boolean value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+    public void setString(String field, String value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+    public void setInt(String field, Integer value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+    public void setList(String field, List<User> value) {  //or is it ArrayList?
+        put(field, value);
+        this.saveInBackground();
+    }
+
+
     public Room() {
-        //put("roomName_", "NO NAME");
-     //   put("isOccupied_", false);
-        //put("numOccupants_", 0);
-        //List<User> occupants = new ArrayList<>();
-        //put("occupants", occupants);
+        setString("roomName_", "NO NAME");
+        setBool("isOccupied_", false);
+        setInt("numOccupants_", 0);
+        List<User> occupants = new ArrayList<>();
+        setList("occupants", occupants);
     }
 
     Room(String name){
-        put("roomName_", name);
-        put("isOccupied_", false);
-        put("numOccupants_", 0);
+        setString("roomName_", name);
+        setBool("isOccupied_", false);
+        setInt("numOccupants_", 0);
         List<User> occupants = new ArrayList<>();
-        put("occupants_", occupants);
+        setList("occupants_", occupants);
     }
 
     Room(String name, int numOccupants_) {
-        put("roomName_", name);
+        setString("roomName_", name);
         if (numOccupants_ > 0) {
-            put("isOccupied_", true);
-            put("numOccupants_", numOccupants_);
+            setBool("isOccupied_", true);
+            setInt("numOccupants_", numOccupants_);
         }
         else {
-            put("isOccupied_", false);
-            put("numOccupants_", 0);
+            setBool("isOccupied_", false);
+            setInt("numOccupants_", 0);
         }
 
         List<User> occupants = new ArrayList<>();
-        put("occupants_", occupants);
+        setList("occupants_", occupants);
     }
 
     //Setters and Getters for the Room Class
@@ -60,7 +81,7 @@ public class Room extends ParseObject{
      * @param occupied determines if the room is occupied or not.
      */
     public void setOccupancy(boolean occupied) {
-        put("isOccupied_", occupied);
+        setBool("isOccupied_", occupied);
     }
 
     /**
@@ -70,7 +91,7 @@ public class Room extends ParseObject{
     public final boolean getOccupancy() {
         Boolean isOccupied = getBoolean("isOccupied_");
         if (isOccupied == null) {
-            put("isOccupied_", false);
+            setBool("isOccupied_", false);
             return false;
         }
         else {
@@ -87,7 +108,7 @@ public class Room extends ParseObject{
     }
 
     public void setNumOccupants(int number) {
-        put("numOccupants_", number);
+        setInt("numOccupants_", number);
     }
 
     /**
@@ -95,7 +116,7 @@ public class Room extends ParseObject{
      * @param name is the name of the room
      */
     public void setName(String name) {
-        put("roomName_", name);
+        setString("roomName_", name);
     }
 
 
@@ -121,7 +142,7 @@ public class Room extends ParseObject{
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
             occupants = new ArrayList<>();
-            put("occupants_", occupants);
+            setList("occupants_", occupants);
         }
         return getList("occupants_");
     }
@@ -136,7 +157,7 @@ public class Room extends ParseObject{
             roomOccupants = new ArrayList<>();
         }
         int numOccupants = roomOccupants.size();
-        put("numOccupants_", numOccupants);
+        setInt("numOccupants_", numOccupants);
     }
 
 

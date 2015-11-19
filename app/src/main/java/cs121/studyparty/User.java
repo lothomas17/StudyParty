@@ -18,29 +18,55 @@ public class User extends ParseObject{
     //private long timeFromLogin_;
     //private Date instantiatedAt;
 
-    public User() {
-        //put("id_", "NO ID");
-        //put("inRoom_", false);
-        //long msTime = System.currentTimeMillis();
-        //Date instantiatedAt = new Date(msTime);
-        //put("instantiatedAt", instantiatedAt);
-
-
-        //put("timeFromLogin_", 0);
+    public void setBool(String field, Boolean value) {
+        put(field, value);
+        this.saveInBackground();
     }
 
-    User(String userName){
+    public void setString(String field, String value) {
+        put(field, value);
+        this.saveInBackground();
+    }
 
-        put("id_", userName);
-        put("inRoom_", false);
+    public void setInt(String field, Integer value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+    public void setDate(String field, Date value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+    public void setLong(String field, Long value) {
+        put(field, value);
+        this.saveInBackground();
+    }
+
+
+    public User() {
+        setString("id_", "NO ID");
+        setBool("inRoom_", false);
+        long msTime = System.currentTimeMillis();
+        Date instantiatedAt = new Date(msTime);
+        setDate("instantiatedAt", instantiatedAt);
+
+
+        setInt("timeFromLogin_", 0);
+    }
+
+    User(String userName) {
+
+        setString("id_", userName);
+        setBool("inRoom_", false);
 
         //sets the time of instantiation, making it easier to compute time.
         long msTime = System.currentTimeMillis();
         Date instantiatedAt = new Date(msTime);
-        put("instantiatedAt", instantiatedAt);
+        setDate("instantiatedAt", instantiatedAt);
 
 
-        put("timeFromLogin_", 0);
+        setInt("timeFromLogin_", 0);
     }
 
     //Setters and Getters
@@ -48,26 +74,28 @@ public class User extends ParseObject{
     public final boolean isInRoom_() {
         Boolean inRoom = getBoolean("inRoom_");
         if (inRoom == null) {
-            put("inRoom_", false);
+            setBool("inRoom_", false);
         }
         return getBoolean("inRoom_");
 
     }
 
     public final void joinRoom(){
-        put("inRoom_", true);
+        setBool("inRoom_", true);
     }
 
     public final void leaveRoom(){
-        put("inRoom_", false);
+        setBool("inRoom_", false);
     }
+
 
     /**
      * Setter for the name field on the user class
      * @param name is the name to be set.
      */
+
     public void setID(String name) {
-        put("id_", name);
+        setString("id_", name);
     }
 
     /**
@@ -77,7 +105,7 @@ public class User extends ParseObject{
     public final String getID() {
         String id = getString("id_");
         if (id == null) {
-            put("id_", "NO ID");
+            setString("id_", "NO ID");
         }
         return getString("id_");
     }
@@ -96,7 +124,7 @@ public class User extends ParseObject{
         }
         long createdTime = createdDate.getTime();
         long timeDiff = (curDateTime.getTime() - createdTime);
-        put("timeFromLogin_", timeDiff);
+        setLong("timeFromLogin_", timeDiff);
     }
 
     /**
