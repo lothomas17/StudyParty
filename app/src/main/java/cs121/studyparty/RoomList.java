@@ -16,6 +16,8 @@ public class RoomList extends ParseObject{
     //private ArrayList<String> roomNames_ = new ArrayList<>();
     public static Room chosenRoom;
     public static int chosenIndex;
+    public static int enteredIndex;
+    public static Room enteredRoom = new Room();
     final Room sampleRoom = new Room("Shanahan 2475");
     Room room2 = new Room("Shanahan 2465");
     Room room3 = new Room("Shanahan 2460");

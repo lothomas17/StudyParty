@@ -23,12 +23,13 @@ public class Room extends ParseObject{
     final static long TIMEOUT = 28800000;
 
     public Room() {
-        //put("roomName_", "NO NAME");
+        put("roomName_", "NO NAME");
      //   put("isOccupied_", false);
-        //put("numOccupants_", 0);
+        put("numOccupants_", 0);
         //List<User> occupants = new ArrayList<>();
         //put("occupants", occupants);
     }
+
 
     Room(String name){
         put("roomName_", name);

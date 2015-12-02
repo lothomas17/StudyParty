@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.provider.Settings.Secure;
 
+import java.util.List;
+
 
 /**
  * Created by Nava Dallal on 10/1/15. This is for the functionality of the second screen
@@ -50,7 +52,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         main_textView.setText(MainActivity.room);
 
         details_textView = (TextView) findViewById(R.id.details_textview);
-        details_textView.setText("Occupancy: " + numOccupants);
+        details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
 
         if (RoomList.chosenRoom.getOccupancy()) {
             main_button = (Button) findViewById(R.id.main_button);
@@ -94,15 +96,12 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         switch (id) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-               // startActivity(new Intent(getApplicationContext(), Loading.class));
                 Log.d("hi", NavUtils.getParentActivityName(this));
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-        }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_settings:
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,14 +110,35 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.main_button) {
+            if ((!RoomList.enteredRoom.getRoomName().equals(RoomList.chosenRoom.getRoomName()))
+                && (RoomList.enteredRoom.getNumOccupants() > 0)){
+                RoomList.enteredRoom.decrementNumOccupants();
+                RoomList.enteredRoom.setOccupancy(false);
+            }
+
             RoomList.chosenRoom.incrementNumOccupants();
             RoomList.chosenRoom.setOccupancy(true);
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             main_textView.setText(RoomList.chosenRoom.getRoomName());
+
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
+
             checkingIn.joinRoom();
+            RoomList.enteredRoom = RoomList.chosenRoom;
+            RoomList.enteredRoom.setName(RoomList.chosenRoom.getRoomName());
+
+            List<Room> roomList = MainActivity.roomListObject.getRoom();
+
+            for (int i = 0; i < roomList.size(); i++){
+                Room currentRoom = MainActivity.roomListObject.getRoomFromList(i);
+                String toCheck = currentRoom.getRoomName();
+
+                if ((toCheck).equals(RoomList.enteredRoom.getRoomName())){
+                    MainActivity.roomListObject.enteredIndex = i;
+                }
+            }
 
             int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
             if(duplicateCheck != 0) {
@@ -131,14 +151,18 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         if (v.getId() == R.id.main_button2) {
+            RoomList.enteredRoom = new Room();
             RoomList.chosenRoom.decrementNumOccupants();
+
             Log.d("occupants", String.valueOf(numOccupants));
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             String time = RoomList.chosenRoom.getBestTime();
             RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
+
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
+
             toAdd.leaveRoom();
             RoomList.chosenRoom.removeUserfromParty(toAdd);
         }
@@ -146,8 +170,16 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // Log the item's position and contents
         // to the console in Debug
     }
+
+
 }
