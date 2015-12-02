@@ -13,24 +13,21 @@ import java.util.List;
  */
 @ParseClassName("Room")
 public class Room extends ParseObject{
-
-    //private fields for the room class
-    //private boolean isOccupied_ = false;
-    //private String roomName_;
-    //private int numOccupants_;
-    //private ArrayList<User> occupants_ = new ArrayList<> ();
-
+    //8 Hours in milliseconds.
     final static long TIMEOUT = 28800000;
 
+    /**
+     * Default Constructor for Parse
+     */
     public Room() {
         put("roomName_", "NO NAME");
-     //   put("isOccupied_", false);
         put("numOccupants_", 0);
-        //List<User> occupants = new ArrayList<>();
-        //put("occupants", occupants);
     }
 
-
+    /**
+     * This is a constructor that can set a name
+     * @param name is the name of the room.
+     */
     Room(String name){
         put("roomName_", name);
         put("isOccupied_", false);
@@ -39,6 +36,11 @@ public class Room extends ParseObject{
         put("occupants_", occupants);
     }
 
+    /**
+     * A constructor that allows rooms to start filled
+     * @param name is the name of the room
+     * @param numOccupants_ is the number of people in the room.
+     */
     Room(String name, int numOccupants_) {
         put("roomName_", name);
         if (numOccupants_ > 0) {
@@ -162,7 +164,8 @@ public class Room extends ParseObject{
     }
 
     /**
-     * A method that takes a user and adds them to the study party.
+     * A method that takes a user and adds them to the study party. It will return -1 if the
+     * user is already in the studyParty.
      * @param toAdd is the user that will be added to the list.
      */
 
@@ -247,7 +250,7 @@ public class Room extends ParseObject{
             }
         }
 
-        if(bestTime <= 1000) {   //1 minute in milliseconds
+        if(bestTime <= 1000) {   //1 second in milliseconds
             toReturn = "\n" + "Unoccupied";
             return toReturn;
         }
@@ -260,7 +263,7 @@ public class Room extends ParseObject{
             tempTime = tempTime / 60;
             long seconds = tempTime % 60;
 
-            toReturn = "\n" + hours + ":" + minutes + ":" + seconds;
+            toReturn = hours + ":" + minutes + ":" + seconds;
             return toReturn;
         }
     }

@@ -1,5 +1,7 @@
 package cs121.studyparty;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -38,19 +40,34 @@ public class RoomList extends ParseObject{
     public static boolean firstTime = false;
     public static String roomID;
 
-
+    /**
+     * Returns a list of rooms that are stored in the roomlist
+     * @return a list of rooms from Parse
+     */
     public final List<Room> getRoom() {
         return getList("rooms_");
     }
 
+    /**
+     * A method that sets which room needs to be given to the UI
+     * @param chosenRoom is the room to be passed
+     */
     public void setChosenRoom(Room chosenRoom){
         this.chosenRoom = chosenRoom;
     }
 
+    /**
+     * A method that will return a specific room from the list
+     * @return the ChosenRoom
+     */
     public Room getChosenRoom(){
         return chosenRoom;
     }
 
+    /**
+     * This method will add a room to the RoomList
+     * @param toAdd is the room to be added
+     */
     public void addRoom(Room toAdd) {
         List<Room> rooms = getList("rooms_");
         if (rooms == null)  {
@@ -65,16 +82,19 @@ public class RoomList extends ParseObject{
 
     }
 
+    /**
+     * A method that will return a list of names from the list of rooms
+     * @return a list of room names
+     */
     public final List<String> getRoomNames(){
         return getList("roomNames_");
     }
+    
 
-    public final void editRoomName(int index, String name){
-        List<String> roomNames = getList("roomNames_");
-        roomNames.set(index, name);
-
-    }
-
+    /**
+     * A method to remove a Room from a RoomList - probably only in emergencies
+     * @param toRemove is the room to be removed from the list.
+     */
     public void removeRoomFromList(Room toRemove) {
         List<Room> rooms = getList("rooms_");
         int indexToRemove = rooms.indexOf(toRemove);
@@ -87,11 +107,19 @@ public class RoomList extends ParseObject{
         }
     }
 
+    /**
+     * Getter for a room out of the list of rooms
+     * @param i is the index of the room in the list
+     * @return the room object from the list
+     */
     public final Room getRoomFromList(int i) {
         List<Room> rooms = getList("rooms_");
         return rooms.get(i);
     }
 
+    /**
+     * Initializes our RoomList with values for Rooms in Shanahan and their times.
+     */
     public void initializeList(){
         //add room to roomList and room name to roomNameList
         addRoom(room8);
@@ -105,6 +133,7 @@ public class RoomList extends ParseObject{
 
         List<String> roomNames = getList("roomNames_");
         if (roomNames == null) {
+            Log.d("TimeCheck", time);
             List<String> names = new ArrayList<>();
             names.add(room8.getRoomName() + time8);
             names.add(room7.getRoomName() + time7);

@@ -12,23 +12,17 @@ import java.util.Date;
 @ParseClassName("User")
 public class User extends ParseObject{
 
-    //fields for User, just a name and the time since the user logged in.
-    //private String id_;
-    //private boolean inRoom_ = false;
-    //private long timeFromLogin_;
-    //private Date instantiatedAt;
 
+    /**
+     * A default constructor for Parse
+     */
     public User() {
-        //put("id_", "NO ID");
-        //put("inRoom_", false);
-        //long msTime = System.currentTimeMillis();
-        //Date instantiatedAt = new Date(msTime);
-        //put("instantiatedAt", instantiatedAt);
-
-
-        //put("timeFromLogin_", 0);
     }
 
+    /**
+     * A constructor that allows the user to set a username
+     * @param userName is the name of the user, usually stored as the device ID.
+     */
     User(String userName){
 
         put("id_", userName);
@@ -45,6 +39,10 @@ public class User extends ParseObject{
 
     //Setters and Getters
 
+    /**
+     * The handler for the inRoom_ variable that is stored in Parse
+     * @return the value of the inRoom_ variable
+     */
     public final boolean isInRoom_() {
         Boolean inRoom = getBoolean("inRoom_");
         if (inRoom == null) {
@@ -54,10 +52,16 @@ public class User extends ParseObject{
 
     }
 
+    /**
+     * A method that marks that a user is in a room.
+     */
     public final void joinRoom(){
         put("inRoom_", true);
     }
 
+    /**
+     * A method that will mark that the user is not in a room.
+     */
     public final void leaveRoom(){
         put("inRoom_", false);
     }

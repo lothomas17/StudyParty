@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else {
                     roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
                             "\n" +
-                            roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants());
+                            roomListObject.getRoom().get(RoomList.chosenIndex).getBestTime());
                 }
 
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else{
                     roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName() +
                             "\n" +
-                            roomListObject.getRoom().get(RoomList.enteredIndex).getNumOccupants());
+                            roomListObject.getRoom().get(RoomList.enteredIndex).getBestTime());
                 }
             }
 
