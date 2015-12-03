@@ -37,7 +37,7 @@ public class Room extends ParseObject{
         this.saveInBackground();
     }
 
-    public void setList(String field, List<User> value) {  //or is it ArrayList?
+    public void setList(String field, List<User> value) {
         put(field, value);
         this.saveInBackground();
     }
