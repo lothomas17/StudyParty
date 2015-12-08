@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        final Room testRoom = new Room("ShanaHAN", 0);
-        testRoom.setOccupancy(true);
-
         ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
 
 
@@ -98,35 +95,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if ((roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants() > 0)
-                || (roomListObject.getRoom().get(RoomList.enteredIndex).getNumOccupants() > 0))
-            {
-                if (roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants() == 0) {
-                    roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
-                            "\nUnoccupied");
-                }
-                else {
-                    roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
-                            "\n" +
-                            roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants());
-                }
 
+            roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
+                    + RoomList.chosenRoom.getBestTime());
 
-                if (roomListObject.getRoom().get(RoomList.enteredIndex).getNumOccupants() == 0) {
-                    roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName() +
-                            "\nUnoccupied");
-                }
-                else{
-                    roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName() +
-                            "\n" +
-                            roomListObject.getRoom().get(RoomList.enteredIndex).getNumOccupants());
-                }
-            }
-
-            else {
-                roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName() +
-                        "\nUnoccupied");
-
+            if (RoomList.enteredRoom.getNumOccupants() > 0 ) {
+                roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName()
+                        + RoomList.enteredRoom.getBestTime());
             }
 
         }
@@ -196,23 +171,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        room = (String) parent.getItemAtPosition(position);
        List<Room> roomList = roomListObject.getRoom();
-        Log.d("rooms", roomListObject.getRoomNames().get(0));
+        Log.d("room", room);
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
             Room currentRoom = roomListObject.getRoomFromList(i);
-            String toCheck;
-            if (currentRoom.getNumOccupants() == 0) {
-                toCheck = currentRoom.getRoomName() + "\nUnoccupied";
-            }
-            else {
-                toCheck = currentRoom.getRoomName() + "\n" + currentRoom.getNumOccupants();
-            }
-            //Log.d("best time is", toCheck);
+            String toCheck = currentRoom.getRoomName() + currentRoom.getBestTime();
+
             if ((toCheck).equals(room)){
                 roomListObject.chosenIndex = i;
                 roomListObject.chosenRoom = currentRoom;
                 Log.d("chosen room is", roomListObject.chosenRoom.getRoomName());
+                Log.d("time", roomListObject.chosenRoom.getBestTime());
                 break;
             }
         }

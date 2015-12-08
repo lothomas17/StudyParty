@@ -167,11 +167,17 @@ public class Room extends ParseObject{
      */
 
     public int addUsertoParty(User toAdd) {
+        System.out.println("added " + toAdd);
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
             occupants = new ArrayList<>();
         }
-        occupants.add(toAdd);
+        for (int i = 0; i < occupants.size(); i ++){
+            if (occupants.get(i).equals(toAdd)){
+                return -1;
+            }
+        }
+        add("occupants_", toAdd);
         Boolean isOccupied = getBoolean("isOccupied_");
         if (!isOccupied) {
             setOccupancy(true);
@@ -200,8 +206,12 @@ public class Room extends ParseObject{
             Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
         }
         int indexToRemove = occupants.indexOf(toRemove);
+        for (int i = 0; i < occupants.size(); i ++) {
+            System.out.println(occupants.get(i));
+        }
+        System.out.println(toRemove);
         if(indexToRemove != -1) {
-            occupants.remove(indexToRemove);
+            toRemove.remove("occupants_");
         }
         else {
             //just prints out a warning if the user is not in the study party.
@@ -209,6 +219,8 @@ public class Room extends ParseObject{
         }
         int numOccupants = getInt("numOccupants_");
         if(numOccupants == 0) {
+            Log.d("reset", "Reset");
+            put("timeFromLogin_", 0);
             setOccupancy(false);
         }
 
@@ -224,12 +236,15 @@ public class Room extends ParseObject{
 
         //checks to see how many users are in the study party.
         int numUsers = getNumOccupants();
+
         long[] checkInTimes = new long[numUsers];
         long bestTime = TIMEOUT;
+
         //returns 0 if nobody is in the study party.
         if(numUsers == 0) {
             bestTime = -1;
         }
+
         //builds the array of times that each user checked in at.
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
@@ -239,6 +254,7 @@ public class Room extends ParseObject{
             User userToCheck = occupants.get(i);
             userToCheck.setTime();
             checkInTimes[i] = userToCheck.getTime();
+            Log.d("time since login", Long.toString(checkInTimes[i]));
         }
         //finds the maximum of the array.
         for(int j = 0; j < numUsers; ++j) {
@@ -248,17 +264,15 @@ public class Room extends ParseObject{
         }
 
         if(bestTime <= 1000) {   //1 minute in milliseconds
-            toReturn = "\n" + "Unoccupied";
+            toReturn = "\nUnoccupied";
             return toReturn;
         }
         else {
             //converts the time into a human readable string, beginning with a newline.
-            long tempTime = bestTime / 60000;
-            long hours = tempTime % 60;
-            tempTime = tempTime / 60;
-            long minutes = tempTime % 60;
-            tempTime = tempTime / 60;
-            long seconds = tempTime % 60;
+            Log.d("best time", Long.toString(bestTime));
+            long seconds = (bestTime / 1000) % 60 ;
+            long minutes = (bestTime / (1000*60)) % 60;
+            long hours   = (bestTime / (1000*60*60)) % 24;
 
             toReturn = "\n" + hours + ":" + minutes + ":" + seconds;
             return toReturn;
