@@ -174,7 +174,13 @@ public class Room extends ParseObject{
         if (occupants == null) {
             occupants = new ArrayList<>();
         }
-        occupants.add(toAdd);
+        for (int i = 0; i < occupants.size(); i ++){
+            if (occupants.get(i).equals(toAdd)){
+                return -1;
+            }
+        }
+        add("occupants_", toAdd);
+
         Boolean isOccupied = getBoolean("isOccupied_");
         if (!isOccupied) {
             setOccupancy(true);
@@ -204,7 +210,7 @@ public class Room extends ParseObject{
         }
         int indexToRemove = occupants.indexOf(toRemove);
         if(indexToRemove != -1) {
-            occupants.remove(indexToRemove);
+            toRemove.remove("occupants_");
         }
         else {
             //just prints out a warning if the user is not in the study party.
@@ -256,14 +262,11 @@ public class Room extends ParseObject{
         }
         else {
             //converts the time into a human readable string, beginning with a newline.
-            long tempTime = bestTime / 60000;
-            long hours = tempTime % 60;
-            tempTime = tempTime / 60;
-            long minutes = tempTime % 60;
-            tempTime = tempTime / 60;
-            long seconds = tempTime % 60;
+            long seconds = (bestTime / 1000) % 60 ;
+            long minutes = (bestTime / (1000*60)) % 60;
+            long hours   = (bestTime / (1000*60*60)) % 24;
 
-            toReturn = hours + ":" + minutes + ":" + seconds;
+            toReturn = "\n" + hours + ":" + minutes + ":" + seconds;
             return toReturn;
         }
     }

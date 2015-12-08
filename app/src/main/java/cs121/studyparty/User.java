@@ -4,6 +4,8 @@
  */
 package cs121.studyparty;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -91,8 +93,14 @@ public class User extends ParseObject{
      * http://stackoverflow.com/questions/3352031/calculate-time-between-two-times-android
      */
     public void setTime() {
+        boolean inRoom = getBoolean("inRoom_");
+        if (!inRoom){
+            put("timeFromLogin_", 0);
+            return;
+        }
         //gets the current time, and subtracts the login time from it.
         long msTime = System.currentTimeMillis();
+        Log.d("time check", Long.toString(msTime));
         Date curDateTime = new Date(msTime);
         Date createdDate = getDate("instantiatedAt");
         if (createdDate == null) {

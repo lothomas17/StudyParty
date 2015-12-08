@@ -31,21 +31,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     Button main_button;
     Button main_button2;
     InputMethodManager inputManager;
-    User checkingIn;
+    //User checkingIn;
     int numOccupants = RoomList.chosenRoom.getNumOccupants();
     String name = Secure.getString(Application.getContext().getContentResolver(), Secure.ANDROID_ID);
-    User toAdd = new User(name);
-
-
+    public static User toAdd;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_join_room);
 
-        if (checkingIn == null) {
-            checkingIn = new User("sample user");
-        }
+      //  if (toAdd == null) {
+        //    toAdd = new User("sample user");
+     //   }
 
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
@@ -109,7 +107,13 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        toAdd = new User(name);
         if (v.getId() == R.id.main_button) {
+            //toAdd = new User(name);
+            Log.d("time when joining", Long.toString(toAdd.getTime()));
+            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
+            toAdd.joinRoom();
+
             if ((!RoomList.enteredRoom.getRoomName().equals(RoomList.chosenRoom.getRoomName()))
                 && (RoomList.enteredRoom.getNumOccupants() > 0)){
                 RoomList.enteredRoom.decrementNumOccupants();
@@ -120,12 +124,14 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             RoomList.chosenRoom.setOccupancy(true);
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
             RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
-            main_textView.setText(RoomList.chosenRoom.getRoomName());
+            String time = RoomList.chosenRoom.getBestTime();
+            main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
+            System.out.println(time);
+
 
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
 
-            checkingIn.joinRoom();
             RoomList.enteredRoom = RoomList.chosenRoom;
             RoomList.enteredRoom.setName(RoomList.chosenRoom.getRoomName());
 
@@ -140,7 +146,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
 
-            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
             if(duplicateCheck != 0) {
             }
             else {  
@@ -153,11 +158,10 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.main_button2) {
             RoomList.enteredRoom = new Room();
             RoomList.chosenRoom.decrementNumOccupants();
-
             Log.d("occupants", String.valueOf(numOccupants));
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
+           // RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             String time = RoomList.chosenRoom.getBestTime();
-            RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
 
             main_button2.setVisibility(View.INVISIBLE);
