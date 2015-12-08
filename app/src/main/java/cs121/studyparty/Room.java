@@ -13,24 +13,21 @@ import java.util.List;
  */
 @ParseClassName("Room")
 public class Room extends ParseObject{
-
-    //private fields for the room class
-    //private boolean isOccupied_ = false;
-    //private String roomName_;
-    //private int numOccupants_;
-    //private ArrayList<User> occupants_ = new ArrayList<> ();
-
+    //8 Hours in milliseconds.
     final static long TIMEOUT = 28800000;
 
+    /**
+     * Default Constructor for Parse
+     */
     public Room() {
         put("roomName_", "NO NAME");
-     //   put("isOccupied_", false);
         put("numOccupants_", 0);
-        //List<User> occupants = new ArrayList<>();
-        //put("occupants", occupants);
     }
 
-
+    /**
+     * This is a constructor that can set a name
+     * @param name is the name of the room.
+     */
     Room(String name){
         put("roomName_", name);
         put("isOccupied_", false);
@@ -39,6 +36,11 @@ public class Room extends ParseObject{
         put("occupants_", occupants);
     }
 
+    /**
+     * A constructor that allows rooms to start filled
+     * @param name is the name of the room
+     * @param numOccupants_ is the number of people in the room.
+     */
     Room(String name, int numOccupants_) {
         put("roomName_", name);
         if (numOccupants_ > 0) {
@@ -162,12 +164,12 @@ public class Room extends ParseObject{
     }
 
     /**
-     * A method that takes a user and adds them to the study party.
+     * A method that takes a user and adds them to the study party. It will return -1 if the
+     * user is already in the studyParty.
      * @param toAdd is the user that will be added to the list.
      */
 
     public int addUsertoParty(User toAdd) {
-        System.out.println("added " + toAdd);
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
             occupants = new ArrayList<>();
@@ -178,6 +180,7 @@ public class Room extends ParseObject{
             }
         }
         add("occupants_", toAdd);
+
         Boolean isOccupied = getBoolean("isOccupied_");
         if (!isOccupied) {
             setOccupancy(true);
@@ -206,10 +209,6 @@ public class Room extends ParseObject{
             Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
         }
         int indexToRemove = occupants.indexOf(toRemove);
-        for (int i = 0; i < occupants.size(); i ++) {
-            System.out.println(occupants.get(i));
-        }
-        System.out.println(toRemove);
         if(indexToRemove != -1) {
             toRemove.remove("occupants_");
         }
@@ -219,8 +218,6 @@ public class Room extends ParseObject{
         }
         int numOccupants = getInt("numOccupants_");
         if(numOccupants == 0) {
-            Log.d("reset", "Reset");
-            put("timeFromLogin_", 0);
             setOccupancy(false);
         }
 
@@ -236,15 +233,12 @@ public class Room extends ParseObject{
 
         //checks to see how many users are in the study party.
         int numUsers = getNumOccupants();
-
         long[] checkInTimes = new long[numUsers];
         long bestTime = TIMEOUT;
-
         //returns 0 if nobody is in the study party.
         if(numUsers == 0) {
             bestTime = -1;
         }
-
         //builds the array of times that each user checked in at.
         List<User> occupants = getList("occupants_");
         if (occupants == null) {
@@ -254,7 +248,6 @@ public class Room extends ParseObject{
             User userToCheck = occupants.get(i);
             userToCheck.setTime();
             checkInTimes[i] = userToCheck.getTime();
-            Log.d("time since login", Long.toString(checkInTimes[i]));
         }
         //finds the maximum of the array.
         for(int j = 0; j < numUsers; ++j) {
@@ -263,13 +256,12 @@ public class Room extends ParseObject{
             }
         }
 
-        if(bestTime <= 1000) {   //1 minute in milliseconds
-            toReturn = "\nUnoccupied";
+        if(bestTime <= 1000) {   //1 second in milliseconds
+            toReturn = "\n" + "Unoccupied";
             return toReturn;
         }
         else {
             //converts the time into a human readable string, beginning with a newline.
-            Log.d("best time", Long.toString(bestTime));
             long seconds = (bestTime / 1000) % 60 ;
             long minutes = (bestTime / (1000*60)) % 60;
             long hours   = (bestTime / (1000*60*60)) % 24;
