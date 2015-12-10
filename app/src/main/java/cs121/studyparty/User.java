@@ -14,7 +14,7 @@ import java.util.Date;
 @ParseClassName("User")
 public class User extends ParseObject{
 
-
+    public static User currentUser;
     /**
      * A default constructor for Parse
      */
@@ -95,6 +95,9 @@ public class User extends ParseObject{
     public void setTime() {
         boolean inRoom = getBoolean("inRoom_");
         if (!inRoom){
+            long msTime = System.currentTimeMillis();
+            Date instantiatedAt = new Date(msTime);
+            put("instantiatedAt", instantiatedAt);
             put("timeFromLogin_", 0);
             return;
         }

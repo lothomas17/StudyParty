@@ -180,7 +180,10 @@ public class Room extends ParseObject{
             }
         }
         add("occupants_", toAdd);
-
+        occupants = getList("occupants_");
+        for(int i = 0; i < occupants.size(); i++){
+            Log.d("add", occupants.get(i).toString());
+        }
         Boolean isOccupied = getBoolean("isOccupied_");
         if (!isOccupied) {
             setOccupancy(true);
@@ -204,6 +207,9 @@ public class Room extends ParseObject{
     public void removeUserfromParty(User toRemove) {
         //uses the built in indexOf method from ArrayList to find the right index
         List<User> occupants = getList("occupants_");
+        for(int i = 0; i < occupants.size(); i++){
+            Log.d("before", occupants.get(i).toString());
+        }
         if (occupants == null) {
             occupants = new ArrayList<>();
             Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
@@ -211,6 +217,8 @@ public class Room extends ParseObject{
         int indexToRemove = occupants.indexOf(toRemove);
         if(indexToRemove != -1) {
             toRemove.remove("occupants_");
+            occupants = getList("occupants_");
+            occupants.remove(indexToRemove);
         }
         else {
             //just prints out a warning if the user is not in the study party.
@@ -220,7 +228,9 @@ public class Room extends ParseObject{
         if(numOccupants == 0) {
             setOccupancy(false);
         }
-
+        for(int i = 0; i < occupants.size(); i++){
+            Log.d("remove", occupants.get(i).toString());
+        }
     }
 
     /**

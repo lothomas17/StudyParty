@@ -169,6 +169,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (RoomList.chosenIndex > -1) {
+            roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
+                    + RoomList.chosenRoom.getBestTime());
+        }
+        if (RoomList.enteredIndex > -1) {
+            if (RoomList.enteredRoom.getNumOccupants() > 0) {
+                roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName()
+                        + RoomList.enteredRoom.getBestTime());
+            }
+        }
+
        room = (String) parent.getItemAtPosition(position);
        List<Room> roomList = roomListObject.getRoom();
         Log.d("room", room);
@@ -177,16 +188,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < roomList.size(); i++){
             Room currentRoom = roomListObject.getRoomFromList(i);
             String toCheck = currentRoom.getRoomName() + currentRoom.getBestTime();
-
             if ((toCheck).equals(room)){
                 roomListObject.chosenIndex = i;
                 roomListObject.chosenRoom = currentRoom;
-                Log.d("chosen room is", roomListObject.chosenRoom.getRoomName());
-                Log.d("time", roomListObject.chosenRoom.getBestTime());
                 break;
             }
         }
-
         // Log the item's position and contents
         // to the console in Debug
         Log.d("room", position + ": " + roomList.get(position));

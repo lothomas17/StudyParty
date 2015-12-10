@@ -109,16 +109,19 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         toAdd = new User(name);
         if (v.getId() == R.id.main_button) {
-            //toAdd = new User(name);
-            Log.d("time when joining", Long.toString(toAdd.getTime()));
-            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
-            toAdd.joinRoom();
 
             if ((!RoomList.enteredRoom.getRoomName().equals(RoomList.chosenRoom.getRoomName()))
-                && (RoomList.enteredRoom.getNumOccupants() > 0)){
+                    && (RoomList.enteredRoom.getNumOccupants() > 0)){
                 RoomList.enteredRoom.decrementNumOccupants();
+                RoomList.enteredRoom.removeUserfromParty(User.currentUser);
                 RoomList.enteredRoom.setOccupancy(false);
             }
+
+            User.currentUser = toAdd;
+            RoomList.chosenRoom.addUsertoParty(toAdd);
+            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
+            User.currentUser.joinRoom();
+
 
             RoomList.chosenRoom.incrementNumOccupants();
             RoomList.chosenRoom.setOccupancy(true);
@@ -126,8 +129,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             String time = RoomList.chosenRoom.getBestTime();
             main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
-            System.out.println(time);
-
 
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
@@ -166,9 +167,9 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
-
-            toAdd.leaveRoom();
-            RoomList.chosenRoom.removeUserfromParty(toAdd);
+            Log.d("user2", User.currentUser.toString());
+            User.currentUser.leaveRoom();
+            RoomList.chosenRoom.removeUserfromParty(User.currentUser);
         }
 
     }
