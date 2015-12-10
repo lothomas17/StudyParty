@@ -3,6 +3,7 @@ package cs121.studyparty;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -14,37 +15,26 @@ import java.util.List;
 @ParseClassName("RoomList")
 public class RoomList extends ParseObject{
 
-    public static Room chosenRoom;
-    public static int chosenIndex = -1;
+    public static Room chosenRoom = new Room();
+    public static int chosenIndex = 0;
     public static int enteredIndex = -1;
     public static Room enteredRoom = new Room();
-    //rooms currently hard coded
-    final Room sampleRoom = new Room("Shanahan 2475");
-    Room room2 = new Room("Shanahan 2465");
-    Room room3 = new Room("Shanahan 2460");
-    Room room4 = new Room("Shanahan 2454");
-    Room room5 = new Room("Shanahan 2450");
-    Room room6 = new Room("Shanahan 1480");
-    Room room7 = new Room("Shanahan B470");
-    Room room8 = new Room("Shanahan B450");
-    public String time = sampleRoom.getBestTime();
-    public String time2 = room2.getBestTime();
-    public String time3 = room3.getBestTime();
-    public String time4 = room4.getBestTime();
-    public String time5 = room5.getBestTime();
-    public String time6 = room6.getBestTime();
-    public String time7 = room7.getBestTime();
-    public String time8 = room8.getBestTime();
-
     public static boolean firstTime = false;
-    public static String roomID;
+    public static String roomID = "0Org7CnmpL";
 
     /**
      * Returns a list of rooms that are stored in the roomlist
      * @return a list of rooms from Parse
      */
     public final List<Room> getRoom() {
-        return getList("rooms_");
+        try {
+            List<Room> rooms = fetchIfNeeded().getList("rooms_");
+            return rooms;
+        }
+        catch (ParseException e) {
+            List<Room> rooms = new ArrayList<>();
+            return rooms;
+        }
     }
 
     /**
@@ -68,15 +58,21 @@ public class RoomList extends ParseObject{
      * @param toAdd is the room to be added
      */
     public void addRoom(Room toAdd) {
-        List<Room> rooms = getList("rooms_");
-        if (rooms == null)  {
-            List<Room> newRoom = new ArrayList<>();
-            newRoom.add(toAdd);
-            put("rooms_", newRoom);
+        try {
+            List<Room> rooms = fetchIfNeeded().getList("rooms_");
+            if (rooms == null)  {
+                List<Room> newRoom = new ArrayList<>();
+                newRoom.add(toAdd);
+                put("rooms_", newRoom);
+            }
+            else {
+                rooms.add(toAdd);
+                put("rooms_", rooms);
+            }
+
         }
-        else {
-            rooms.add(toAdd);
-            put("rooms_", rooms);
+        catch (ParseException e) {
+            Log.d("BADBAD", "couldnt get list of rooms to add a room");
         }
 
     }
@@ -86,7 +82,14 @@ public class RoomList extends ParseObject{
      * @return a list of room names
      */
     public final List<String> getRoomNames(){
-        return getList("roomNames_");
+        try {
+            List<String> rooms = fetchIfNeeded().getList("roomNames_");
+            return rooms;
+        }
+        catch (ParseException e) {
+            List<String> rooms = new ArrayList<>();
+            return rooms;
+        }
     }
     
 
@@ -112,49 +115,16 @@ public class RoomList extends ParseObject{
      * @return the room object from the list
      */
     public final Room getRoomFromList(int i) {
-        List<Room> rooms = getList("rooms_");
-        return rooms.get(i);
+        try {
+            List<Room> rooms = fetchIfNeeded().getList("rooms_");
+            return rooms.get(i);
+        }
+        catch (ParseException e) {
+            Room room = new Room();
+            room.setName("NO NAME");
+            room.setNumOccupants(0);
+            return room;
+        }
     }
 
-    /**
-     * Initializes our RoomList with values for Rooms in Shanahan and their times.
-     */
-    public void initializeList(){
-        //add room to roomList and room name to roomNameList
-        addRoom(room8);
-        addRoom(room7);
-        addRoom(room6);
-        addRoom(room5);
-        addRoom(room4);
-        addRoom(room3);
-        addRoom(room2);
-        addRoom(sampleRoom);
-
-        List<String> roomNames = getList("roomNames_");
-        if (roomNames == null) {
-            Log.d("TimeCheck", time);
-            List<String> names = new ArrayList<>();
-            names.add(room8.getRoomName() + time8);
-            names.add(room7.getRoomName() + time7);
-            names.add(room6.getRoomName() + time6);
-            names.add(room5.getRoomName() + time5);
-            names.add(room4.getRoomName() + time4);
-            names.add(room3.getRoomName() + time3);
-            names.add(room2.getRoomName() + time2);
-            names.add(sampleRoom.getRoomName() +time);
-            put("roomNames_", names);
-        }
-        else {
-            roomNames.add(room8.getRoomName() + time8);
-            roomNames.add(room7.getRoomName() + time7);
-            roomNames.add(room6.getRoomName() + time6);
-            roomNames.add(room5.getRoomName() + time5);
-            roomNames.add(room4.getRoomName() + time4);
-            roomNames.add(room3.getRoomName() + time3);
-            roomNames.add(room2.getRoomName() + time2);
-            roomNames.add(sampleRoom.getRoomName() +time);
-            put("roomNames_", roomNames);
-        }
-
-    }
 }

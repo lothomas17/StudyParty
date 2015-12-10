@@ -13,9 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -39,65 +39,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
-        //if main activity has not been run yet, initialize the default roomlist
-        if (!RoomList.firstTime) {
-            roomListObject = new RoomList();
-            roomListObject.initializeList();
-            roomListObject.saveInBackground(new SaveCallback() {
-
-                public void done(ParseException e) {
-                    if (e == null) {
-                        // Saved successfully.
-                        Log.d("KEYKEY", "User update saved!");
-                        String ID = roomListObject.getObjectId();
-                        Log.d("KEYKEY", "The object id of roomlist (from User) is: " + ID);
-                        roomListObject.setObjectId(ID);
-                        try {
-                            Log.d("Sleepy", "I'm sleeping now");
-                            Thread.sleep(5000);
-                        } catch (InterruptedException f) {
-                            // TODO Auto-generated catch block
-                            f.printStackTrace();
-                        }
-
-                    } else {
-                        // The save failed.
-                        Log.d("KEYKEY", "User update error: " + e);
-                    }
-                }
-
-            });
-            RoomList.firstTime = true;
-
-           try {
-                Thread.sleep(5000);                 //1000 milliseconds is one second.
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-            RoomList.roomID = roomListObject.getObjectId();
-
+        try {
+            query.whereEqualTo("objectId", RoomList.roomID);
+            roomListObject = query.getFirst();
+            roomListObject.saveInBackground();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        else {
-            //if not running screen for the first time, retrieve updated list from parse
-            try {
-                query.whereEqualTo("objectId", RoomList.roomID);
-                roomListObject = query.getFirst();
-                roomListObject.saveInBackground();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            //update the names of the room chosen by user or entered by user to display proper time
-            // in the listview
+        // intialize rooms the first time so fields arent null
+        if (!RoomList.firstTime) {
+            RoomList.chosenRoom.setName("NO NAME");
+            RoomList.chosenRoom.setNumOccupants(0);
+            RoomList.enteredRoom.setName("NO NAME");
+            RoomList.enteredRoom.setNumOccupants(0);
+        }
+
+
+        //update the names of the room chosen by user or entered by user to display proper time
+        // in the listview, but not the first time
+        if (RoomList.firstTime) {
             roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
                     + RoomList.chosenRoom.getBestTime());
-
-            if (RoomList.enteredRoom.getNumOccupants() > 0 ) {
-                roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName()
-                        + RoomList.enteredRoom.getBestTime());
-            }
-
         }
+
+        RoomList.firstTime = true;
+
+        if (RoomList.enteredRoom.getNumOccupants() > 0 ) {
+            roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName()
+                    + RoomList.enteredRoom.getBestTime());
+        }
+
 
         //display room names in roomNames in the listview
         mArrayAdapter = new ArrayAdapter(this,

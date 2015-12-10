@@ -35,6 +35,12 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_join_room);
 
+        // initialize values for enteredRoom the first time
+        if (!RoomList.firstTime) {
+            RoomList.enteredRoom.setName("NO NAME");
+            RoomList.enteredRoom.setNumOccupants(0);
+        }
+
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
         main_textView.setText(MainActivity.room);
@@ -146,6 +152,8 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.main_button2) {
             //if user is leaving a room, set entered room to default
             RoomList.enteredRoom = new Room();
+            RoomList.enteredRoom.setName("NO NAME");
+            RoomList.enteredRoom.setNumOccupants(0);
 
             RoomList.chosenRoom.decrementNumOccupants();
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());

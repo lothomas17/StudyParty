@@ -4,9 +4,8 @@
  */
 package cs121.studyparty;
 
-import android.util.Log;
-
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.Date;
@@ -79,11 +78,13 @@ public class User extends ParseObject{
      * @return the name of the user
      */
     public final String getID() {
-        String id = getString("id_");
-        if (id == null) {
-            put("id_", "NO ID");
+        try {
+            String id = fetchIfNeeded().getString("id_");
+            return id;
         }
-        return getString("id_");
+        catch (ParseException e) {
+            return "NO ID";
+        }
     }
 
     /**
@@ -91,14 +92,28 @@ public class User extends ParseObject{
      * http://stackoverflow.com/questions/3352031/calculate-time-between-two-times-android
      */
     public void setTime() {
-        boolean inRoom = getBoolean("inRoom_");
-        if (!inRoom){
-            long msTime = System.currentTimeMillis();
-            Date instantiatedAt = new Date(msTime);
-            put("instantiatedAt", instantiatedAt);
-            put("timeFromLogin_", 0);
-            return;
+        try {
+            boolean inRoom = fetchIfNeeded().getBoolean("inRoom_");
+            if (!inRoom){
+                long msTime = System.currentTimeMillis();
+                Date instantiatedAt = new Date(msTime);
+                put("instantiatedAt", instantiatedAt);
+                put("timeFromLogin_", 0);
+                return;
+            }
         }
+        catch (ParseException e) {
+            boolean inRoom = false;
+            if (!inRoom){
+                long msTime = System.currentTimeMillis();
+                Date instantiatedAt = new Date(msTime);
+                put("instantiatedAt", instantiatedAt);
+                put("timeFromLogin_", 0);
+                return;
+            }
+        }
+
+
         //gets the current time, and subtracts the login time from it.
         long msTime = System.currentTimeMillis();
         Date curDateTime = new Date(msTime);
@@ -119,8 +134,4 @@ public class User extends ParseObject{
     public final long getTime() {
         return getLong("timeFromLogin_");
     }
-
-
-
-
 }
