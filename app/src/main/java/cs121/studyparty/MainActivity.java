@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ParseQuery<RoomList> query = ParseQuery.getQuery(RoomList.class);
 
-
         mainListView = (ListView) findViewById(R.id.main_listview);
 
         //if main activity has not been run yet, initialize the default roomlist
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // TODO Auto-generated catch block
                             f.printStackTrace();
                         }
-
                     } else {
                         // The save failed.
                         Log.d("KEYKEY", "User update error: " + e);
@@ -76,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             RoomList.roomID = roomListObject.getObjectId();
-
         }
         else {
             //if not running screen for the first time, retrieve updated list from parse
