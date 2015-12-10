@@ -181,10 +181,8 @@ public class Room extends ParseObject{
         }
         add("occupants_", toAdd);
         occupants = getList("occupants_");
-        for(int i = 0; i < occupants.size(); i++){
-            Log.d("add", occupants.get(i).toString());
-        }
         Boolean isOccupied = getBoolean("isOccupied_");
+
         if (!isOccupied) {
             setOccupancy(true);
 
@@ -214,6 +212,7 @@ public class Room extends ParseObject{
             occupants = new ArrayList<>();
             Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
         }
+
         int indexToRemove = occupants.indexOf(toRemove);
         if(indexToRemove != -1) {
             toRemove.remove("occupants_");
@@ -224,13 +223,27 @@ public class Room extends ParseObject{
             //just prints out a warning if the user is not in the study party.
             System.out.println("The user specified is not in the study party.");
         }
+
         int numOccupants = getInt("numOccupants_");
         if(numOccupants == 0) {
             setOccupancy(false);
         }
-        for(int i = 0; i < occupants.size(); i++){
-            Log.d("remove", occupants.get(i).toString());
+    }
+
+    /**
+     * A function that will return the properly formatted time component
+     * @param time is the component of time to be formatted
+     * @return 0 + time if time < 10 and just time if otherwise
+     */
+    public String formatTime(long time){
+        String timeStr;
+        if (time < 10){
+            timeStr = "0" + Long.toString(time);
         }
+        else{
+            timeStr = Long.toString(time);
+        }
+        return timeStr;
     }
 
     /**
@@ -240,11 +253,15 @@ public class Room extends ParseObject{
     public final String getBestTime() {
         //The human readable form of the bestTime
         String toReturn;
+        String secondsStr;
+        String minutesStr;
+        String hoursStr;
 
         //checks to see how many users are in the study party.
         int numUsers = getNumOccupants();
         long[] checkInTimes = new long[numUsers];
         long bestTime = TIMEOUT;
+
         //returns 0 if nobody is in the study party.
         if(numUsers == 0) {
             bestTime = -1;
@@ -276,7 +293,11 @@ public class Room extends ParseObject{
             long minutes = (bestTime / (1000*60)) % 60;
             long hours   = (bestTime / (1000*60*60)) % 24;
 
-            toReturn = "\n" + hours + ":" + minutes + ":" + seconds;
+            secondsStr = formatTime(seconds);
+            minutesStr = formatTime(minutes);
+            hoursStr = formatTime(hours);
+
+            toReturn = "\n" + hoursStr + ":" + minutesStr + ":" + secondsStr;
             return toReturn;
         }
     }

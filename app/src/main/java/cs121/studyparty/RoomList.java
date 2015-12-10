@@ -14,12 +14,11 @@ import java.util.List;
 @ParseClassName("RoomList")
 public class RoomList extends ParseObject{
 
-    //private ArrayList<Room> rooms_ = new ArrayList<>();
-    //private ArrayList<String> roomNames_ = new ArrayList<>();
     public static Room chosenRoom;
     public static int chosenIndex = -1;
     public static int enteredIndex = -1;
     public static Room enteredRoom = new Room();
+    //rooms currently hard coded
     final Room sampleRoom = new Room("Shanahan 2475");
     Room room2 = new Room("Shanahan 2465");
     Room room3 = new Room("Shanahan 2460");

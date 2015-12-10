@@ -34,8 +34,6 @@ public class User extends ParseObject{
         long msTime = System.currentTimeMillis();
         Date instantiatedAt = new Date(msTime);
         put("instantiatedAt", instantiatedAt);
-
-
         put("timeFromLogin_", 0);
     }
 
@@ -103,9 +101,9 @@ public class User extends ParseObject{
         }
         //gets the current time, and subtracts the login time from it.
         long msTime = System.currentTimeMillis();
-        Log.d("time check", Long.toString(msTime));
         Date curDateTime = new Date(msTime);
         Date createdDate = getDate("instantiatedAt");
+
         if (createdDate == null) {
             createdDate = new Date(msTime);
         }

@@ -1,7 +1,5 @@
 package cs121.studyparty;
 
-import android.content.Intent;
-import android.graphics.Paint;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,9 +27,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     TextView details_textView;
     Button main_button;
     Button main_button2;
-    InputMethodManager inputManager;
-    //User checkingIn;
-    int numOccupants = RoomList.chosenRoom.getNumOccupants();
     String name = Secure.getString(Application.getContext().getContentResolver(), Secure.ANDROID_ID);
     public static User toAdd;
 
@@ -41,10 +35,6 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_join_room);
 
-      //  if (toAdd == null) {
-        //    toAdd = new User("sample user");
-     //   }
-
         //set the title to the proper room name
         main_textView = (TextView) findViewById(R.id.main_textview);
         main_textView.setText(MainActivity.room);
@@ -52,6 +42,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
         details_textView = (TextView) findViewById(R.id.details_textview);
         details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
 
+        //if the user has joined the room, show the leave room button
         if (RoomList.chosenRoom.getOccupancy()) {
             main_button = (Button) findViewById(R.id.main_button);
             main_button.setOnClickListener(this);
@@ -63,7 +54,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             main_button2.setBackgroundColor(Color.rgb(135, 206, 235));
             main_button2.setVisibility(View.VISIBLE);
         }
-
+        //otherwise show join room button
         else {
             main_button = (Button) findViewById(R.id.main_button);
             main_button.setOnClickListener(this);
@@ -109,7 +100,8 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         toAdd = new User(name);
         if (v.getId() == R.id.main_button) {
-
+            //if the user has already joined a room and is now joining a new room, log them out
+            // of the old room
             if ((!RoomList.enteredRoom.getRoomName().equals(RoomList.chosenRoom.getRoomName()))
                     && (RoomList.enteredRoom.getNumOccupants() > 0)){
                 RoomList.enteredRoom.decrementNumOccupants();
@@ -117,12 +109,12 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
                 RoomList.enteredRoom.setOccupancy(false);
             }
 
+            //set the current user to the user created from clicking join room
             User.currentUser = toAdd;
             RoomList.chosenRoom.addUsertoParty(toAdd);
-            int duplicateCheck = RoomList.chosenRoom.addUsertoParty(toAdd);
             User.currentUser.joinRoom();
 
-
+            //set the proper text
             RoomList.chosenRoom.incrementNumOccupants();
             RoomList.chosenRoom.setOccupancy(true);
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
@@ -130,14 +122,17 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
             String time = RoomList.chosenRoom.getBestTime();
             main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
 
+            //make leave room button visible
             main_button.setVisibility(View.INVISIBLE);
             main_button2.setVisibility(View.VISIBLE);
 
+            //since this room has now been entered by user, set entered room to chosen room
             RoomList.enteredRoom = RoomList.chosenRoom;
             RoomList.enteredRoom.setName(RoomList.chosenRoom.getRoomName());
 
             List<Room> roomList = MainActivity.roomListObject.getRoom();
 
+            //get the index of the entered room in the room list object
             for (int i = 0; i < roomList.size(); i++){
                 Room currentRoom = MainActivity.roomListObject.getRoomFromList(i);
                 String toCheck = currentRoom.getRoomName();
@@ -146,28 +141,22 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
                     MainActivity.roomListObject.enteredIndex = i;
                 }
             }
-
-            if(duplicateCheck != 0) {
-            }
-            else {  
-/*                details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
-                main_button.setVisibility(View.INVISIBLE);
-                main_button2.setVisibility(View.VISIBLE);
-                toAdd.joinRoom();*/
-            }
         }
+
         if (v.getId() == R.id.main_button2) {
+            //if user is leaving a room, set entered room to default
             RoomList.enteredRoom = new Room();
+
             RoomList.chosenRoom.decrementNumOccupants();
-            Log.d("occupants", String.valueOf(numOccupants));
             details_textView.setText("Occupancy: " + RoomList.chosenRoom.getNumOccupants());
-           // RoomList.chosenRoom.setName(RoomList.chosenRoom.getRoomName());
             String time = RoomList.chosenRoom.getBestTime();
             main_textView.setText(RoomList.chosenRoom.getRoomName() + time);
 
+            //make join room button visible
             main_button2.setVisibility(View.INVISIBLE);
             main_button.setVisibility(View.VISIBLE);
-            Log.d("user2", User.currentUser.toString());
+
+            //remove the current user from occupants array
             User.currentUser.leaveRoom();
             RoomList.chosenRoom.removeUserfromParty(User.currentUser);
         }
@@ -175,6 +164,7 @@ public class JoinRoomActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    //if the back button on phone (not app) is pressed
     public void onBackPressed() {
         super.onBackPressed();
         NavUtils.navigateUpFromSameTask(this);

@@ -39,8 +39,6 @@ public class Application extends android.app.Application {
         testRoom.setName("TESTEST");
         parseList.addRoom(testRoom);
 
-
-        //parseList.put("batman", "ALFRED");
         Log.d("KEYKEY", "still running first");
         parseList.saveInBackground(new SaveCallback() {
 
@@ -70,14 +68,6 @@ public class Application extends android.app.Application {
         });
 
         isSet = true;
-
-
-
-
-//        parseList.addRoom(testRoom);
-//        parseList.initializeList();
-//
-//        parseList.saveInBackground();
 
     }
 

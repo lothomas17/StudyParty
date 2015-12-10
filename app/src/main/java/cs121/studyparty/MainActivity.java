@@ -13,9 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -27,13 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ListView mainListView;
     ArrayAdapter mArrayAdapter;
-    public static String room;
-    public static RoomList roomListObject;
-    EditText inputSearch;
-
-
-    final static String OBJECTID = "aqfWCXmdBR";
-
+    public static String room;                  //the room chosen by the user
+    public static RoomList roomListObject;      //the roomList from Parse populate listview
+    EditText inputSearch;                       //search bar input
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainListView = (ListView) findViewById(R.id.main_listview);
 
+        //if main activity has not been run yet, initialize the default roomlist
         if (!RoomList.firstTime) {
             roomListObject = new RoomList();
             roomListObject.initializeList();
@@ -75,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
             RoomList.firstTime = true;
 
-            try {
+           try {
                 Thread.sleep(5000);                 //1000 milliseconds is one second.
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
@@ -84,18 +78,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             RoomList.roomID = roomListObject.getObjectId();
 
         }
-
-    else {
+        else {
+            //if not running screen for the first time, retrieve updated list from parse
             try {
                 query.whereEqualTo("objectId", RoomList.roomID);
                 roomListObject = query.getFirst();
                 roomListObject.saveInBackground();
-                Log.d("check", roomListObject.getRoomNames().get(RoomList.chosenIndex));
-                Log.d("time", String.valueOf(roomListObject.getRoom().get(RoomList.chosenIndex).getNumOccupants()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
+            //update the names of the room chosen by user or entered by user to display proper time
+            // in the listview
             roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
                     + RoomList.chosenRoom.getBestTime());
 
@@ -151,8 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // automatically handle clicks on the Home/Up button
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -169,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //if the chosen room and entered room have been initialized, update their names
+        // since the get best time is constantly changing
         if (RoomList.chosenIndex > -1) {
             roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
                     + RoomList.chosenRoom.getBestTime());
@@ -182,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
        room = (String) parent.getItemAtPosition(position);
        List<Room> roomList = roomListObject.getRoom();
-        Log.d("room", room);
 
         //set the room on the next screen to the room chosen by the user
         for (int i = 0; i < roomList.size(); i++){
