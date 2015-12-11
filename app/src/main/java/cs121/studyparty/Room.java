@@ -3,6 +3,7 @@ package cs121.studyparty;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -20,8 +21,6 @@ public class Room extends ParseObject{
      * Default Constructor for Parse
      */
     public Room() {
-        put("roomName_", "NO NAME");
-        put("numOccupants_", 0);
     }
 
     /**
@@ -101,18 +100,17 @@ public class Room extends ParseObject{
         put("roomName_", name);
     }
 
-
     /**
      * The getter for the roomName field
      * @return the room name associated with the room
      */
     public final String getRoomName() {
-        String roomName = getString("roomName_");
-        if (roomName == null) {
-            return "NO NAME";
-        }
-        else {
+        try {
+            String roomName = fetchIfNeeded().getString("roomName_");
             return roomName;
+        }
+        catch (ParseException e) {
+            return "NO NAME";
         }
     }
 
@@ -259,6 +257,7 @@ public class Room extends ParseObject{
 
         //checks to see how many users are in the study party.
         int numUsers = getNumOccupants();
+        Log.d("numUsers", Integer.toString(numUsers));
         long[] checkInTimes = new long[numUsers];
         long bestTime = TIMEOUT;
 

@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // TODO Auto-generated catch block
                             f.printStackTrace();
                         }
+
                     } else {
                         // The save failed.
                         Log.d("KEYKEY", "User update error: " + e);
@@ -74,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             RoomList.roomID = roomListObject.getObjectId();
+            RoomList.chosenRoom.setName("NO NAME");
+            RoomList.chosenRoom.setNumOccupants(0);
+            RoomList.enteredRoom.setName("NO NAME");
+            RoomList.enteredRoom.setNumOccupants(0);
         }
         else {
             //if not running screen for the first time, retrieve updated list from parse
@@ -86,15 +91,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             //update the names of the room chosen by user or entered by user to display proper time
             // in the listview
+
+        if (RoomList.firstTime) {
             roomListObject.getRoomNames().set(RoomList.chosenIndex, RoomList.chosenRoom.getRoomName()
                     + RoomList.chosenRoom.getBestTime());
-
+        }
+        RoomList.firstTime = true;
             if (RoomList.enteredRoom.getNumOccupants() > 0 ) {
                 roomListObject.getRoomNames().set(RoomList.enteredIndex, RoomList.enteredRoom.getRoomName()
                         + RoomList.enteredRoom.getBestTime());
             }
 
         }
+        //RoomList.firstTime = true;
 
         //display room names in roomNames in the listview
         mArrayAdapter = new ArrayAdapter(this,
@@ -184,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         }
+
         // Log the item's position and contents
         // to the console in Debug
         Log.d("room", position + ": " + roomList.get(position));
