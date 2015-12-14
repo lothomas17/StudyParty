@@ -15,14 +15,15 @@ import java.util.List;
 @ParseClassName("RoomList")
 public class RoomList extends ParseObject{
 
-    public static Room chosenRoom = new Room();
+    public static Room chosenRoom = new Room("NO NAME");
     public static int chosenIndex = -1;
     public static int enteredIndex = -1;
-    public static Room enteredRoom = new Room();
+    public static Room enteredRoom = new Room("NO NAME");
     public static boolean firstTime = false;
     public static String roomID = "0Org7CnmpL";
 
-    final Room sampleRoom = new Room("Shanahan 2475");
+    //rooms currently hard coded
+    final Room room1 = new Room("Shanahan 2475");
     Room room2 = new Room("Shanahan 2465");
     Room room3 = new Room("Shanahan 2460");
     Room room4 = new Room("Shanahan 2454");
@@ -30,7 +31,7 @@ public class RoomList extends ParseObject{
     Room room6 = new Room("Shanahan 1480");
     Room room7 = new Room("Shanahan B470");
     Room room8 = new Room("Shanahan B450");
-    public String time = sampleRoom.getBestTime();
+    public String time1 = room1.getBestTime();
     public String time2 = room2.getBestTime();
     public String time3 = room3.getBestTime();
     public String time4 = room4.getBestTime();
@@ -155,7 +156,7 @@ public class RoomList extends ParseObject{
         addRoom(room4);
         addRoom(room3);
         addRoom(room2);
-        addRoom(sampleRoom);
+        addRoom(room1);
 
         List<String> roomNames = getList("roomNames_");
         if (roomNames == null) {
@@ -167,7 +168,7 @@ public class RoomList extends ParseObject{
             names.add(room4.getRoomName() + time4);
             names.add(room3.getRoomName() + time3);
             names.add(room2.getRoomName() + time2);
-            names.add(sampleRoom.getRoomName() +time);
+            names.add(room1.getRoomName() + time1);
             put("roomNames_", names);
         }
         else {
@@ -178,7 +179,7 @@ public class RoomList extends ParseObject{
             roomNames.add(room4.getRoomName() + time4);
             roomNames.add(room3.getRoomName() + time3);
             roomNames.add(room2.getRoomName() + time2);
-            roomNames.add(sampleRoom.getRoomName() +time);
+            roomNames.add(room1.getRoomName() + time1);
             put("roomNames_", roomNames);
         }
 

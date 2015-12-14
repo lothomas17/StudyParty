@@ -203,9 +203,7 @@ public class Room extends ParseObject{
     public void removeUserfromParty(User toRemove) {
         //uses the built in indexOf method from ArrayList to find the right index
         List<User> occupants = getList("occupants_");
-        for(int i = 0; i < occupants.size(); i++){
-            Log.d("before", occupants.get(i).toString());
-        }
+
         if (occupants == null) {
             occupants = new ArrayList<>();
             Log.d("BADBAD", "trying to remove a user from an uninitialized occupants list!");
